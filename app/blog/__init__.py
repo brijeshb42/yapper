@@ -3,7 +3,9 @@
 """
 from flask import Blueprint
 
-blog_blueprint = Blueprint('blog',__name__)
+BP_NM = 'blog'
+
+blog_blueprint = Blueprint(BP_NM,__name__)
 
 @blog_blueprint.route('/')
 def index():

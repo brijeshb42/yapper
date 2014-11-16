@@ -3,6 +3,8 @@
 """
 from flask import Blueprint
 
-main_blueprint = Blueprint('main', __name__)
+BP_NM = 'main'
+
+main_blueprint = Blueprint(BP_NM, __name__)
 
 from . import controller
