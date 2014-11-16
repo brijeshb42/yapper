@@ -5,7 +5,6 @@ from flask import Flask, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from config import config
 
-
 db = SQLAlchemy()
 
 
@@ -16,10 +15,12 @@ def create_app(config_name):
 
     db.init_app(app)
 
-    from main import main as main_blueprint
+    from main import main_blueprint
     from user import user_blueprint
+    from blog import blog_blueprint
 
-    app.register_blueprint(main_blueprint, url_prefix='/')
-    app.register_blueprint(user_blueprint, url_prefix='/u')
+    app.register_blueprint(main_blueprint, url_prefix=config[config_name].USER_PREFIX)
+    app.register_blueprint(user_blueprint, url_prefix=config[config_name].BLOG_PREFIX)
+    app.register_blueprint(blog_blueprint, url_prefix='/blog')
 
     return app
