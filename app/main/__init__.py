@@ -5,6 +5,7 @@ from flask import Blueprint
 
 BP_NM = 'main'
 
-main_blueprint = Blueprint(BP_NM, __name__)
+main_blueprint = Blueprint(BP_NM, __name__, template_folder='views')
 
 from . import controller
+from . import errors

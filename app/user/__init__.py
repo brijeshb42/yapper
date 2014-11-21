@@ -1,5 +1,6 @@
 from flask import Blueprint
 
-user_blueprint = Blueprint('user', __name__, template_folder='templates')
+BP_NM = 'user'
+user_blueprint = Blueprint(BP_NM, __name__, template_folder='templates')
 
 from . import controller
