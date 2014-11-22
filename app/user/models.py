@@ -1,24 +1,36 @@
-from .. import db
+from app import db
 from werkzeug.security import generate_password_hash, \
     check_password_hash
 from flask.ext.login import UserMixin
 #from config import Config
 from .. import login_manager
 
-class Role(db.Model):
-    __tablename__ = 'roles'
+ROLE_ADMIN = 'admin'
+ROLE_USER = 'user'
+
+class BaseModel(db.Model):
+    __abstract__ = True
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    modified_at = db.Column(db.DateTime, default=db.func.current_timestamp(),\
+                            onupdate=db.func.current_timestamp())
+
+
+class Role(BaseModel):
+    __tablename__ = 'roles'
+    name = db.Column(db.String(64), unique=True ,default=ROLE_USER)
     users = db.relationship('User', backref='role', lazy='dynamic')
 
     def __repr__(self):
-        return '<Role %d - %s>' % self.id, self.name
+        if self.id is None:
+            return '<Role %s>' % self.name
+        else:
+            return '<Role %d - %s>' % self.id, self.name
 
 
-class User(UserMixin,db.Model):
+class User(UserMixin,BaseModel):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, index=True)
+    #username = db.Column(db.String(64), unique=True, index=True)
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))

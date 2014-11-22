@@ -7,5 +7,5 @@ BP_NM = 'main'
 
 main_blueprint = Blueprint(BP_NM, __name__, template_folder='views')
 
-from . import controller
+from . import controllers
 from . import errors
