@@ -5,8 +5,6 @@ from flask import Blueprint
 
 BP_NM = 'blog'
 
-blog_blueprint = Blueprint(BP_NM,__name__)
+blog_blueprint = Blueprint(BP_NM, __name__)
 
-@blog_blueprint.route('/')
-def index():
-    return 'blog index'
+from . import controllers

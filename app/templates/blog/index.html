@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Posts{% endblock %}
+{% block content %}
+    {% if posts|length > 0 %}
+        {% if pagination is not none %}
+            <div> total: {{ pagination.total }} ,
+            {% if pagination.has_prev %}
+                <a href="{{ url_for('blog.index', page=pagination.prev_num) }}">{{ pagination.prev_num }}</a>
+            {% endif %}
+                <a href="#">{{ pagination.page }}</a>
+            {% if pagination.has_next %}
+                <a href="{{ url_for('blog.index', page=pagination.next_num) }}">{{ pagination.next_num }}</a>
+            {% endif %}
+            </div>
+        {% endif %}
+        {% for post in posts %}
+            <div class="post">
+            <h2><a href="{{ url_for('blog.get_post', pid=post.id) }}">{{ post.title }}</a></h2>
+            <p>Created at: {{ post.created_at }} by {{ post.author.name }}</p>
+            <p>{{ post.html|safe }}</p>
+            <form action="{{ url_for('blog.delete', pid=post.id) }}" method="POST">
+                <input type="hidden" name="_method" value="DELETE" />
+                <input type="submit" value="Delete"/>
+            </form>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No post</p>
+    {% endif %}
+{% endblock %}

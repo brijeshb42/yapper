@@ -10,6 +10,15 @@
 </head>
 <body>
 	<h1>App</h1>
+    {% if current_user.is_authenticated() %}
+        {{ current_user.name }}
+        <a href="{{ url_for('blog.add') }}">Add Post</a>
+        <a href="{{ url_for('user.logout') }}">Logout</a>
+    {% else %}
+        <a href="{{ url_for('user.login') }}">Login</a>
+        <a href="{{ url_for('user.signup') }}">Sign Up</a>
+    {% endif %}
+    <a href="{{ url_for('blog.index') }}">Posts</a>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul>

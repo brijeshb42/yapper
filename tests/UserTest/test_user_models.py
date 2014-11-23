@@ -1,5 +1,5 @@
 import unittest
-from app.user.models import User, Role, ROLE_USER
+from app.user.models import User, Role
 
 
 class UserModelTestCase(unittest.TestCase):
