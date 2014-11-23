@@ -14,6 +14,7 @@ def get_post(pid):
     post = Post.query.get_or_404(pid)
     return render_template('blog/index.html', posts=[post], pagination=None)
 
+
 @blog_blueprint.route('/page/<int:page>')
 @blog_blueprint.route('/')
 def index(page=1):
