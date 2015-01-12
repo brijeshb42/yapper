@@ -1,0 +1,44 @@
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+
+class Config:
+    TABLE_PREFIX = 'cms'
+    USER_PREFIX = '/u'
+    BLOG_PREFIX = '/blog'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'somethingsecret'
+    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN') or 'admin@example.com'
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_SECRET_KEY = os.environ.get('CSRF_KEY') or 'secretcsrf'
+    POSTS_PER_PAGE = 10
+
+    @staticmethod
+    def init_app(app):
+        pass
+
+
+class DevConfig(Config):
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'data-dev.db')
+
+
+class TestConfig(Config):
+    TESTING = True
+    WTF_CSRF_ENABLED = False
+    CSRF_ENABLED = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'data-test.db')
+
+
+class ProdConfig(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'data-prod.db')
+
+config = {
+    'dev': DevConfig,
+    'test': TestConfig,
+    'prod': ProdConfig,
+    'default': DevConfig
+}

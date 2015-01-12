@@ -1,20 +1,20 @@
 from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_required, login_user, logout_user, current_user
-from . import user_blueprint
+from . import user_blueprint as ubp
 from .forms import LoginForm, RegisterForm
 from app import db
 from .models import User
 
-@user_blueprint.route('/')
+@ubp.route('/')
 @login_required
 def index():
     return 'user index'
 
-@user_blueprint.route('/<name>')
+@ubp.route('/<name>')
 def user_index(name):
     return  'user ' + name
 
-@user_blueprint.route('/login', methods=['GET', 'POST'])
+@ubp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user is not None and current_user.is_authenticated():
         return redirect(url_for('main.index'))
@@ -28,7 +28,7 @@ def login():
     return render_template('user/login.html', form=form)
 
 
-@user_blueprint.route('/logout')
+@ubp.route('/logout')
 @login_required
 def logout():
     logout_user()
@@ -36,7 +36,7 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-@user_blueprint.route('/signup', methods=['GET','POST'])
+@ubp.route('/signup', methods=['GET','POST'])
 @login_required
 def signup():
     form = RegisterForm()
@@ -45,6 +45,6 @@ def signup():
                     email=form.email.data,
                     password=form.password.data)
         db.session.add(user)
-        flash('You have been registered')
+        flash(u'You have been registered')
         return redirect(url_for('main.index'))
     return render_template('user/signup.html', form=form)

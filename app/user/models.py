@@ -35,7 +35,7 @@ class User(UserMixin,BaseModel):
 
     @property
     def password(self):
-        raise AttributeError('Password is not a readable attribute.')
+        raise AttributeError(u'Password is not a readable attribute.')
 
     @password.setter
     def password(self, password):

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title> {% block title %}{% endblock %} - App</title>
+	<title>{% block title %}{% endblock %} - App</title>
 	{% block meta %}
 	<meta name="description" content="Description">
 	{% endblock %}
@@ -23,7 +23,7 @@
       {% if messages %}
         <ul>
         {% for message in messages %}
-            <li>{{ message }} </li>
+            <li>{{ message }}</li>
         {% endfor %}
         </ul>
       {% endif %}

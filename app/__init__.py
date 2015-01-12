@@ -1,7 +1,7 @@
 """
 (c) 2014 by Brijesh Bittu
 """
-from flask import Flask, render_template
+from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 #from flask_wtf import CsrfProtect

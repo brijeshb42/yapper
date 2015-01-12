@@ -3,3 +3,4 @@ env/
 *.pyo
 config.py
 *.db
+.DS_Store
