@@ -1,8 +1,17 @@
 import unittest
-from app.user.models import User, Role
+
+from app import db
+from app.user.models import User, Role, Permission, AnonymousUser
 
 
 class UserModelTestCase(unittest.TestCase):
+    def setUp(self):
+        db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
     def test_password_setter(self):
         u = User(password='cat')
         self.assertTrue(u.password_hash is not None)
@@ -21,3 +30,17 @@ class UserModelTestCase(unittest.TestCase):
         u = User(password='cat')
         u2 = User(password='cat')
         self.assertTrue(u.password_hash != u2.password_hash)
+
+    def test_roles_and_permissions(self):
+        Role.insert_roles()
+        u = User(email = 'brijeshb2@gmail.com', password='adt')
+        self.assertTrue(u.can(Permission.WRITE_POSTS))
+
+    def test_admin(self):
+        Role.insert_roles()
+        u = User(email = 'admin@example.com', password='adt')
+        self.assertTrue(u.is_admin())
+
+    def test_anon_user(self):
+        u = AnonymousUser()
+        self.assertFalse(u.can(Permission.WRITE_POSTS))

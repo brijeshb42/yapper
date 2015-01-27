@@ -7,7 +7,8 @@ from flask.ext.login import login_required, current_user
 from . import blog_blueprint
 from .forms import PostForm
 from .models import Post
-
+from ..user.models import Permission
+from app.decorators import permission_required
 
 @blog_blueprint.route('/<int:pid>', methods=['GET'])
 def get_post(pid):
@@ -37,6 +38,7 @@ def delete(pid):
 
 @blog_blueprint.route('/add', methods=['GET','POST'])
 @login_required
+@permission_required(Permission.WRITE_POSTS)
 def add():
     form = PostForm()
     if form.validate_on_submit():
@@ -44,6 +46,6 @@ def add():
                     content=form.body.data,
                     author=current_user._get_current_object())
         db.session.add(post)
-        flash('Post added')
+        flash(u'Post added')
         return redirect(url_for('.index'))
     return render_template('blog/add.html', form=form)

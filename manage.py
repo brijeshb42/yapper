@@ -28,6 +28,18 @@ def test():
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+@manager.command
+def init():
+    """Enter initial data"""
+    db.create_all()
+    Role.insert_roles()
+    u = User.query.filter_by(email=app.config['FLASKY_ADMIN']).first()
+    if u is None:
+        u = User(email=app.config['FLASKY_ADMIN'], password='testpass')
+        db.session.add(u)
+        db.session.commit()
+    print('DB initialized')
+
 
 if __name__ == '__main__':
     manager.run()

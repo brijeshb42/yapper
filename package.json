@@ -1,0 +1,36 @@
+{
+  "name": "flask-web",
+  "version": "1.0.0",
+  "description": "flask blog",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:brijesh_bittu/flask-web.git"
+  },
+  "keywords": [
+    "flask",
+    "blog"
+  ],
+  "author": "brijeshb42",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^1.1.1",
+    "gulp": "^3.8.10",
+    "gulp-concat": "^2.4.3",
+    "gulp-header": "^1.2.2",
+    "gulp-jshint": "^1.9.0",
+    "gulp-livereload": "^3.5.0",
+    "gulp-minify-css": "^0.4.2",
+    "gulp-notify": "^2.1.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-ruby-sass": "^1.0.0-alpha.2",
+    "gulp-sass": "^1.3.2",
+    "gulp-uglify": "^1.1.0"
+  }
+}

@@ -15,11 +15,14 @@ class LoginTestCase(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
-        role = Role(name='admin')
-        db.session.add(role)
-        db.session.commit()
-        user = User(name='Test User', email='test@mail.com',\
-                password='testpass', role=role)
+        Role.insert_roles()
+        role = Role.query.filter_by(name='user').first()
+        user = User(
+                name='Test User',
+                email='test@mail.com',\
+                password='testpass', 
+                role=role
+            )
         db.session.add(user)
         db.session.commit()
 

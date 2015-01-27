@@ -2,7 +2,8 @@
 (c) 2014 by Brijesh Bittu
 """
 from app import db
-
+from markdown import markdown
+import bleach
 
 class BaseModel(db.Model):
     __abstract__ = True
@@ -15,7 +16,7 @@ class BaseModel(db.Model):
 class Post(BaseModel):
     __tablename__ = 'posts'
     title = db.Column(db.String(256))
-    #slug = db.Column(db.String(300))
+    slug = db.Column(db.String(300))
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -27,8 +28,6 @@ class Post(BaseModel):
     @content.setter
     def content(self, body):
         self.body = body
-        from markdown import markdown
-        import bleach
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
                         'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
                         'h2', 'h3', 'p']
@@ -43,8 +42,6 @@ class Post(BaseModel):
 
     @staticmethod
     def on_change_body(target, value, oldvalue, initiator):
-        from markdown import markdown
-        import bleach
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
                         'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
                         'h2', 'h3', 'p']

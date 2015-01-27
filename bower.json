@@ -1,0 +1,21 @@
+{
+  "name": "flask-web",
+  "version": "1.0.0",
+  "authors": [
+    "Brijesh Bittu <brijeshb42@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "gridism": "~0.2.1",
+    "riotjs": "~2.0.1",
+    "normalize.css": "~3.0.2",
+    "jquery": "~2.1.3"
+  }
+}
