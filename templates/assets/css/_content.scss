@@ -1,0 +1,19 @@
+.flashes {
+    padding: 10px 0px;
+
+    .message {
+        margin-bottom: 2px;
+        padding: 10px;
+        background: $flash-color;
+        border: 1px solid darken($flash-color, 30%);
+        text-align: center;
+    }
+
+    .message:last-child{
+        margin-bottom: 0px;
+    }
+
+    p{
+        margin: 0;
+    }
+}

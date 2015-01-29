@@ -1,0 +1,12 @@
+body {
+    background-color: #F0F0F0;
+}
+
+.grid.wrap {
+    max-width: $max-width;
+}
+
+a, a:visited {
+    color: $link-color;
+    transition: all 0.3s ease-in;
+}

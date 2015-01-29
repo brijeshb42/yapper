@@ -1,0 +1,46 @@
+$header-bg-color: $base-color;
+$header-h1      : 4em;
+
+.header {
+    padding: 20px 0px 0px 0px;
+    background: $header-bg-color;
+    color: #fff;
+    text-align: center;
+    border-top: 10px solid darken($header-bg-color, 15%);
+
+    h1 {
+        font-size: $header-h1;
+        margin: 0.25em 0px;
+
+        a, a:visited {
+            text-decoration: none;
+            color: #fff;
+        }
+    }
+
+    nav{
+        border-bottom: 4px solid darken($header-bg-color, 15%);
+
+        ul {
+            padding: 0px;
+            margin: 0px;
+        }
+        li {
+            display: inline-block;
+            margin-top: 4px;
+        }
+        a, a:visited {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            background: darken($header-bg-color, 15%);
+            border-top: 2px solid darken($header-bg-color, 15%);
+            vertical-align: middle;
+            color: #fff;
+
+            &:hover {
+                background: lighten($header-bg-color, 5%);
+            }
+        }
+    }
+}

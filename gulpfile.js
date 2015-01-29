@@ -11,7 +11,7 @@ var gulp        = require('gulp'),
     livereload  = require('gulp-livereload'),
     header      = require('gulp-header'),
     process     = require('child_process'),
-    minifyHtml  = require('gulp-minify-html'),
+    //minifyHtml  = require('gulp-minify-html'),
     usemin      = require('gulp-usemin'),
     rev         = require('gulp-rev'),
     mainBowerFiles = require('main-bower-files');
@@ -37,11 +37,15 @@ var src = './templates/assets/',
 /* styles */
 gulp.task('styles', function (){
     return gulp.src(src+'css/style.scss')
-        .pipe(plumber(function () {
+        .pipe(plumber(function (e) {
             console.log('There was an issue compiling Sass');
+            console.log(e);
             this.emit('end');
         }))
-        .pipe(sass())
+        .pipe(sass({
+            errLogToConsole: true,
+            sourceComments : 'normal'
+        }))
         .pipe(gulp.dest(dest+'css'))
         .pipe(livereload());
 });
