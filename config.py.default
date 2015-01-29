@@ -3,6 +3,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
+    APP_NAME = 'Bloggy'
     TABLE_PREFIX = 'cms'
     USER_PREFIX = '/u'
     BLOG_PREFIX = '/blog'
@@ -35,6 +36,7 @@ class TestConfig(Config):
 class ProdConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-prod.db')
+
 
 config = {
     'dev': DevConfig,

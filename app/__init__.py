@@ -30,4 +30,10 @@ def create_app(config_name):
     app.register_blueprint(user_blueprint, url_prefix=config[config_name].USER_PREFIX)
     app.register_blueprint(blog_blueprint, url_prefix=config[config_name].BLOG_PREFIX)
 
+    # if app.config['DEBUG']:
+    #     #app.jinja_options['trim_blocks'] = True
+    #     #app.jinja_options['lstrip_blocks'] = True
+    #     app.jinja_env.trim_blocks = True
+    #     app.jinja_env.lstrip_blocks = True
+
     return app

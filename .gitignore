@@ -2,6 +2,9 @@ config.py
 *.db
 bower_components/
 app/static/
+app/templates/
+app/templates/base1.html
+templates/vendor/
 
 #### joe made this: https://goel.io/joe
 

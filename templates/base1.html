@@ -6,7 +6,10 @@
     <meta name="description" content="Description">
     {% endblock %}
     {% block styles %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor.css') }}"/>
+    <!-- build:css ../static/css/vendor.css -->
+    <link rel="stylesheet" href="/assets/vendor/normalize.css/normalize.css"/>
+    <link rel="stylesheet" href="/assets/vendor/gridism/gridism.css"/>
+    <!-- endbuild -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
     {% endblock %}
 </head>
@@ -37,7 +40,9 @@
     {% block content %}{% endblock %}
 
     {% block scripts %}
-    <script src="{{ url_for('static', filename='js/vendor.js') }}"></script>
+    <!-- build:js ../static/js/vendor.js -->
+    <link rel="stylesheet" href="/assets/vendor/jquery/dist/jquery.js"/>
+    <!-- endbuild -->
     <script src="{{ url_for('static', filename='js/all.js') }}"></script>
     {% endblock %}
     

@@ -91,24 +91,30 @@ class User(UserMixin,BaseModel):
         return self.role is not None and \
             (self.role.permissions & permissions) == permissions
 
-    def is_admin(self):
-        return self.is_administrator()
-
     def is_administrator(self):
+        return self.is_admin()
+
+    def is_admin(self):
         return self.can(Permission.ADMIN)
 
     def is_confirmed(self):
         return self.status is not None and self.status == True
 
+
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
         return False
 
-    def is_administrator(self):
+    def is_admin(self):
         return False
 
-    def is_admin(self):
-        return is_administrator()
+    def is_administrator(self):
+        return is_admin()
+
+    def is_confirmed(self):
+        return False
+
+
 
 login_manager.anonymous_user = AnonymousUser
 

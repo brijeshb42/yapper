@@ -1,13 +1,20 @@
-var gulp = require('gulp'),
-    sass = require('gulp-sass'),
-    minifyCss = require('gulp-minify-css'),
-    jshint = require('gulp-jshint'),
-    uglify = require('gulp-uglify'),
-    concat = require('gulp-concat'),
-    notify = require('gulp-notify'),
-    rename = require('gulp-rename'),
-    del = require('del'),
-    header = require('gulp-header');
+var gulp        = require('gulp'),
+    sass        = require('gulp-sass'),
+    minifyCss   = require('gulp-minify-css'),
+    jshint      = require('gulp-jshint'),
+    uglify      = require('gulp-uglify'),
+    concat      = require('gulp-concat'),
+    notify      = require('gulp-notify'),
+    rename      = require('gulp-rename'),
+    del         = require('del'),
+    plumber     = require('gulp-plumber'),
+    livereload  = require('gulp-livereload'),
+    header      = require('gulp-header'),
+    process     = require('child_process'),
+    minifyHtml  = require('gulp-minify-html'),
+    usemin      = require('gulp-usemin'),
+    rev         = require('gulp-rev'),
+    mainBowerFiles = require('main-bower-files');
 
 
 var pkg = require('./package.json');
@@ -21,17 +28,37 @@ var banner = ['/**',
   ''].join('\n');
 
 
-var src = './static/',
-    dest = './app/static/';
+var src = './templates/assets/',
+    dest = './app/static/',
+    htmlSrc = './templates/',
+    htmlDest = './app/templates/';
 
+
+/* styles */
 gulp.task('styles', function (){
-    return gulp.src(src+'css/main.scss')
+    return gulp.src(src+'css/style.scss')
+        .pipe(plumber(function () {
+            console.log('There was an issue compiling Sass');
+            this.emit('end');
+        }))
         .pipe(sass())
-        .pipe(gulp.dest(dest+'css'));
+        .pipe(gulp.dest(dest+'css'))
+        .pipe(livereload());
 });
 
+
+gulp.task('bower', function (){
+    return gulp.src(mainBowerFiles(), {base: './bower_components/'})
+        .pipe(gulp.dest('./templates/assets/vendor/'));
+});
+
+
 gulp.task('styles-dist', function (){
-    return gulp.src(src+'css/main.scss')
+    return gulp.src(src+'css/style.scss')
+        .pipe(plumber(function () {
+            console.log('There was an issue compiling Sass');
+            this.emit('end');
+        }))
         .pipe(sass())
         .pipe(gulp.dest(dest+'css'))
         .pipe(rename({ suffix: '.min' }))
@@ -41,16 +68,26 @@ gulp.task('styles-dist', function (){
 });
 
 
+/* scripts */
 gulp.task('scripts', function(){
-    return gulp.src(src+'js/**/*.js')
+    return gulp.src(src+'js/**//*.js')
+        .pipe(plumber(function () {
+            console.log('There was an issue processing JS.');
+            this.emit('end');
+        }))
         .pipe(jshint('.jshintrc'))
         .pipe(jshint.reporter('default'))
         .pipe(concat('all.js'))
-        .pipe(gulp.dest(dest+'js'));
+        .pipe(gulp.dest(dest+'js'))
+        .pipe(livereload());
 });
 
 gulp.task('scripts-dist', function(){
-    return gulp.src(src+'js/*.js')
+    return gulp.src(src+'js/**/*.js')
+        .pipe(plumber(function () {
+            console.log('There was an issue processing JS.');
+            this.emit('end');
+        }))
         .pipe(jshint('.jshintrc'))
         .pipe(jshint.reporter('default'))
         .pipe(concat('all.js'))
@@ -61,92 +98,73 @@ gulp.task('scripts-dist', function(){
         .pipe(gulp.dest(dest+'js'));
 });
 
-gulp.task('clean', function(cb){
-    del([dest+'css', dest+'js'], cb);
+
+gulp.task('usemin', ['bower'], function(){
+    return gulp.src(['./templates/base1.html'])
+        .pipe(usemin({
+            css: [minifyCss(), 'concat'],
+            //html: [minifyHtml({empty: true})],
+            js: [uglify(), 'concat']
+        }))
+        .pipe(gulp.dest('./app/templates/'));
 });
+
+
+/* clean */
+gulp.task('clean', function(cb){
+    del([dest, 'templates/assets/vendor/'], cb);
+});
+gulp.task('clean-dist', function(cb){
+    del([dest+'css/**/*.min.css', dest+'js/**/*.min.js'], cb);
+});
+
+
+gulp.task('flask', function(){
+    var spawn = process.spawn;
+    console.info('Starting flask server');
+    var PIPE = {stdio: 'inherit'};
+    spawn('python', ['manage.py','runserver'], PIPE);
+});
+
+
+gulp.task('init', function(){
+    var spawn = process.spawn;
+    console.info('python manage.py db upgarade');
+    var PIPE = {stdio: 'inherit'};
+    spawn('python', ['manage.py','db','upgrade'], PIPE);
+});
+
+
+gulp.task('watch', function() { 
+    // Watch image files
+    //gulp.watch('src/images/**//*', ['images']);
+ 
+    // Create LiveReload server
+    livereload.listen({
+        port: 35729
+    });
+    console.info('Livereload on PORT '+livereload.options.port);
+
+    // Watch .scss files
+    gulp.watch(src+'css/**/*.scss', ['styles']);
+ 
+    // Watch .js files
+    gulp.watch(src+'js/**/*.js', ['scripts']);
+
+    // Watch template changes
+    gulp.watch('./templates/base1.html', ['usemin']);
+    gulp.watch('./app/templates/**/*.html', livereload.reload);
+});
+
 
 gulp.task('dist', ['clean'], function() {
     gulp.start('styles-dist', 'scripts-dist');
 });
 
 gulp.task('default', ['clean'], function() {
-    gulp.start('styles', 'scripts');
+    gulp.start('styles', 'scripts', 'usemin');
 });
 
-/*
-var gulp = require('gulp'),
-    sass = require('gulp-ruby-sass'),
-    autoprefixer = require('gulp-autoprefixer'),
-    minifycss = require('gulp-minify-css'),
-    jshint = require('gulp-jshint'),
-    uglify = require('gulp-uglify'),
-    imagemin = require('gulp-imagemin'),
-    rename = require('gulp-rename'),
-    concat = require('gulp-concat'),
-    notify = require('gulp-notify'),
-    cache = require('gulp-cache'),
-    livereload = require('gulp-livereload'),
-    del = require('del');
- 
-// Styles
-gulp.task('styles', function() {
-  return gulp.src('src/styles/main.scss')
-    .pipe(sass({ style: 'expanded', }))
-    .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-    .pipe(gulp.dest('dist/styles'))
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(minifycss())
-    .pipe(gulp.dest('dist/styles'))
-    .pipe(notify({ message: 'Styles task complete' }));
+gulp.task('serve',['default'], function(){
+    gulp.start('flask', 'watch');
 });
- 
-// Scripts
-gulp.task('scripts', function() {
-  return gulp.src('src/scripts/**//*.js')
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('default'))
-    .pipe(concat('main.js'))
-    .pipe(gulp.dest('dist/scripts'))
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(uglify())
-    .pipe(gulp.dest('dist/scripts'))
-    .pipe(notify({ message: 'Scripts task complete' }));
-});
- 
-// Images
-gulp.task('images', function() {
-  return gulp.src('src/images/**//*')
-    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-    .pipe(gulp.dest('dist/images'))
-    .pipe(notify({ message: 'Images task complete' }));
-});
- 
-// Clean
-gulp.task('clean', function(cb) {
-    del(['dist/assets/css', 'dist/assets/js', 'dist/assets/img'], cb)
-});
- 
-// Default task
-gulp.task('default', ['clean'], function() {
-    gulp.start('styles', 'scripts', 'images');
-});
- 
-// Watch
-gulp.task('watch', function() {
- 
-  // Watch .scss files
-  gulp.watch('src/styles/**//*.scss', ['styles']);
- 
-  // Watch .js files
-  gulp.watch('src/scripts/**//*.js', ['scripts']);
- 
-  // Watch image files
-  gulp.watch('src/images/**//*', ['images']);
- 
-  // Create LiveReload server
-  livereload.listen();
- 
-  // Watch any files in dist/, reload on change
-  gulp.watch(['dist/**']).on('change', livereload.changed);
- 
-});*/
