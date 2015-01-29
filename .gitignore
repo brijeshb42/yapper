@@ -4,7 +4,7 @@ bower_components/
 app/static/
 app/templates/
 app/templates/base1.html
-templates/vendor/
+templates/assets/vendor/
 
 #### joe made this: https://goel.io/joe
 
