@@ -1,7 +1,31 @@
-$base-color: #1A6093;
-$link-color: #08C;
+$base-color : #1A6093;
 
-$max-width: 800px;
+$color-green : #5cb85c;
+$color-red : #d9534f;
+$color-blue : #337ab7;
+$color-yellow : #f0ad4e;
+
+$link-color : #08C;
+
+$alert-success-bgcolor : #85b7e7;
+$alert-success-bordercolor : #3085d6;
+$alert-success-txtcolor : #1a5186;
+
+$alert-info-bgcolor : #80cb92;
+$alert-info-bordercolor : #42a35a;
+$alert-info-txtcolor : #255a32;
+
+$alert-warning-bgcolor : #fbdca0;
+$alert-warning-bordercolor : #f6b83f;
+$alert-warning-txtcolor : #644405;
+
+$alert-error-bgcolor : #df8989;
+$alert-error-bordercolor : #ca3838;
+$alert-error-txtcolor : #7b2121;
+
+$max-width: 100%;
 
 $flash-color: #DCDDDF;
 //$flash-color-info: ;
+
+$base-padding: 10px;

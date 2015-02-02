@@ -20,7 +20,8 @@ class LoginTestCase(unittest.TestCase):
         user = User(
                 name='Test User',
                 email='test@mail.com',\
-                password='testpass', 
+                password='testpass',
+                status=True,
                 role=role
             )
         db.session.add(user)

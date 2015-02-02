@@ -1,9 +1,10 @@
 from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_required, login_user, logout_user,\
     current_user
+
+from app import db
 from . import user_blueprint as ubp
 from .forms import LoginForm, RegisterForm
-from app import db
 from .models import User
 
 @ubp.route('/')
@@ -25,7 +26,7 @@ def login():
         if user is not None and user.verify_password(form.password.data) and user.is_confirmed():
             login_user(user, form.remember_me.data)
             return redirect(request.args.get('next', '') or url_for('main.index'))
-        flash(u'Invalid combination')
+        flash(u'Invalid combination', 'warning')
     return render_template('user/login.html', form=form)
 
 
@@ -33,7 +34,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash(u'You have been logged out.')
+    flash(u'You have been logged out.', 'info')
     return redirect(url_for('main.index'))
 
 
@@ -42,10 +43,14 @@ def logout():
 def signup():
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User(name=form.name.data,
-                    email=form.email.data,
-                    password=form.password.data)
+        user = User(
+            name=form.name.data,
+            email=form.email.data,
+            password=form.password.data,
+            role_id=form.role.data,
+            status=form.confirm.data
+        )
         db.session.add(user)
-        flash(u'You have been registered')
+        flash(u'You have been registered', 'success')
         return redirect(url_for('main.index'))
     return render_template('user/signup.html', form=form)

@@ -1,8 +1,8 @@
 from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, \
-    SubmitField, ValidationError
+    SubmitField, SelectField, ValidationError
 from wtforms.validators import DataRequired, Length, Email, EqualTo
-from .models import User
+from .models import User, Role
 
 
 class LoginForm(Form):
@@ -19,7 +19,13 @@ class RegisterForm(Form):
             Length(1,64), Email()])
     password = PasswordField(u'Password', validators=[DataRequired(), EqualTo('cpassword', message=u'Both passwords should be same')])
     cpassword = PasswordField(u'Confirm Password', validators=[DataRequired()])
+    role = SelectField(u'Role', coerce=int)
+    confirm = BooleanField(u'Register With Confirmation?')
     submit = SubmitField(u'Sign Up')
+
+    def __init__(self, **kwargs):
+        super(RegisterForm, self).__init__(**kwargs)
+        self.role.choices = [(r.id, r.name) for r in Role.query.with_entities(Role.id, Role.name).all()]
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():

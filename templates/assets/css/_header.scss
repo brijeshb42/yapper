@@ -1,16 +1,19 @@
 $header-bg-color: $base-color;
 $header-h1      : 4em;
+$header-h1-margin: 0.25em 0px;
+
+$header-dark : darken($header-bg-color, 15%);
 
 .header {
     padding: 20px 0px 0px 0px;
     background: $header-bg-color;
     color: #fff;
     text-align: center;
-    border-top: 10px solid darken($header-bg-color, 15%);
+    border-top: 10px solid $header-dark;
 
     h1 {
         font-size: $header-h1;
-        margin: 0.25em 0px;
+        margin: $header-h1-margin;
 
         a, a:visited {
             text-decoration: none;
@@ -19,7 +22,9 @@ $header-h1      : 4em;
     }
 
     nav{
-        border-bottom: 4px solid darken($header-bg-color, 15%);
+        border-bottom: 4px solid $header-dark;
+        text-align: left;
+        padding: 0px $base-padding;
 
         ul {
             padding: 0px;
@@ -33,13 +38,13 @@ $header-h1      : 4em;
             display: block;
             padding: 10px 20px;
             text-decoration: none;
-            background: darken($header-bg-color, 15%);
-            border-top: 2px solid darken($header-bg-color, 15%);
+            background: $header-dark;
+            border-top: 2px solid $header-dark;
             vertical-align: middle;
             color: #fff;
 
             &:hover {
-                background: lighten($header-bg-color, 5%);
+                background: lighten($header-bg-color, 10%);
             }
         }
     }

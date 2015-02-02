@@ -31,8 +31,12 @@ def index(page=1):
 @login_required
 def delete(pid):
     post = Post.query.get_or_404(pid)
-    db.session.delete(post)
-    db.session.commit()
+    if current_user.is_admin() or post.author.id == current_user.id:
+        db.session.delete(post)
+        db.session.commit()
+        flash(u'Post deleted.','success')
+        return redirect(url_for('.index'))
+    flash(u'You cannot delete this post.','error')
     return redirect(url_for('.index'))
 
 
@@ -42,9 +46,10 @@ def delete(pid):
 def add():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data,
-                    content=form.body.data,
-                    author=current_user._get_current_object())
+        post = Post(
+            title=form.title.data,
+            content=form.body.data,
+            author=current_user._get_current_object())
         db.session.add(post)
         flash(u'Post added')
         return redirect(url_for('.index'))

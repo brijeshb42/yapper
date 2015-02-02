@@ -1,19 +1,47 @@
 .flashes {
     padding: 10px 0px;
 
-    .message {
-        margin-bottom: 2px;
-        padding: 10px;
-        background: $flash-color;
-        border: 1px solid darken($flash-color, 30%);
-        text-align: center;
-    }
-
-    .message:last-child{
-        margin-bottom: 0px;
-    }
-
     p{
         margin: 0;
     }
+}
+
+.message {
+    margin-bottom: 2px;
+    padding: 5px;
+    background: $flash-color;
+    border: 1px solid darken($flash-color, 30%);
+    text-align: center;
+
+    &.info {
+        background: $alert-info-bgcolor;
+        border-color: $alert-info-bordercolor;
+        color: $alert-info-txtcolor;
+    }
+
+    &.error {
+        background: $alert-error-bgcolor;
+        border-color: $alert-error-bordercolor;
+        color: $alert-error-txtcolor;
+    }
+
+    &.success {
+        background: $alert-success-bgcolor;
+        border-color: $alert-success-bordercolor;
+        color: $alert-success-txtcolor;
+    }
+
+    &.warning {
+        background: $alert-warning-bgcolor;
+        border-color: $alert-warning-bordercolor;
+        color: $alert-warning-txtcolor;
+    }
+}
+
+.message:last-child{
+    margin-bottom: 0px;
+}
+
+.content{
+    padding: $base-padding $base-padding 0px $base-padding;
 }

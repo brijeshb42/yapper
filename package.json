@@ -1,8 +1,7 @@
 {
-  "name": "flask-web",
+  "name": "Yapper",
   "version": "1.0.0",
   "description": "flask blog",
-  "main": "index.js",
   "directories": {
     "test": "tests"
   },

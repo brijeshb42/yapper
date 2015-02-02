@@ -4,6 +4,8 @@
     <title>{% block title %}{% endblock %} - {{ config.APP_NAME }}</title>
     {% block meta %}
     <meta name="description" content="Description">
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% endblock %}
     {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor.css') }}"/>
@@ -27,28 +29,16 @@
             </ul>
         </nav>
     </header>
-    <section class="grid wrap">
-    {% with messages = get_flashed_messages() %}
+    <section class="grid wrap content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div class="flashes">
-        {% for message in messages %}
-            <div class="message"><p>{{ message }}</p></div>
+        {% for category, message in messages %}
+            <div class="message {{ category }}"><p>{{ message }}</p></div>
         {% endfor %}
         </div>
       {% endif %}
     {% endwith %}
-
-    <div class="flashes">
-        <div class="message info">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, enim.</p>
-        </div>
-        <div class="message error">
-            <p>Optio quia obcaecati totam consequatur placeat, natus quod, ab ad?</p>
-        </div>
-        <div class="message success">
-            <p>Vel sapiente laborum tenetur repellendus eveniet necessitatibus quas amet assumenda.</p>
-        </div>
-    </div>
 
     {% block content %}{% endblock %}
     </section>
