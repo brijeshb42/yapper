@@ -1,6 +1,7 @@
 config.py
 *.db
 bower_components/
+migrations/
 app/static/
 app/templates/
 app/templates/base1.html
