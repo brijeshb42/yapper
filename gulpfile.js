@@ -70,7 +70,7 @@ gulp.task('styles-dist', function (){
         }))
         .pipe(sass())
         .pipe(gulp.dest(dest+'css'))
-        .pipe(rename({ suffix: '.min' }))
+        //.pipe(rename({ suffix: '.min' }))
         .pipe(minifyCss())
         .pipe(header(banner, { pkg : pkg } ))
         .pipe(gulp.dest(dest+'css'));
@@ -101,7 +101,7 @@ gulp.task('scripts-dist', function(){
         .pipe(jshint.reporter('default'))
         .pipe(concat('all.js'))
         .pipe(gulp.dest(dest+'js'))
-        .pipe(rename({ suffix: '.min' }))
+        //.pipe(rename({ suffix: '.min' }))
         .pipe(uglify({mangle: true}))
         .pipe(header(banner, { pkg : pkg } ))
         .pipe(gulp.dest(dest+'js'));
