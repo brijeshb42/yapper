@@ -170,7 +170,7 @@ gulp.task('watch', function() {
 
 
 gulp.task('dist', ['clean'], function() {
-    gulp.start('styles-dist', 'scripts-dist');
+    gulp.start('styles-dist', 'copyfiles', 'scripts-dist');
 });
 
 gulp.task('default', ['clean'], function() {

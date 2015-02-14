@@ -2,7 +2,7 @@ import os
 
 import app as application
 
-env = os.getenv('FLASK_ENV')
+env = os.getenv('FLASK_CONFIG')
 
 if env is None:
     env = 'dev'
