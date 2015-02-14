@@ -1,7 +1,8 @@
 """
 (c) 2014 by Brijesh Bittu
 """
-from flask import current_app, redirect, url_for, render_template, flash, request
+from flask import current_app, redirect, url_for, render_template, \
+    flash, request
 from app import db
 from flask.ext.login import login_required, current_user
 from . import blog_blueprint
@@ -9,6 +10,7 @@ from .forms import PostForm
 from .models import Post
 from ..user.models import Permission
 from app.decorators import permission_required
+
 
 @blog_blueprint.route('/<int:pid>', methods=['GET'])
 def get_post(pid):
@@ -24,7 +26,11 @@ def index(page=1):
         error_out=False
     )
     posts = pagination.items
-    return render_template('blog/index.html', posts=posts, pagination=pagination)
+    return render_template(
+        'blog/index.html',
+        posts=posts,
+        pagination=pagination
+    )
 
 
 @blog_blueprint.route('/<int:pid>', methods=['DELETE', 'POST'])
@@ -34,13 +40,13 @@ def delete(pid):
     if current_user.is_admin() or post.author.id == current_user.id:
         db.session.delete(post)
         db.session.commit()
-        flash(u'Post deleted.','success')
+        flash(u'Post deleted.', 'success')
         return redirect(url_for('.index'))
-    flash(u'You cannot delete this post.','error')
+    flash(u'You cannot delete this post.', 'error')
     return redirect(url_for('.index'))
 
 
-@blog_blueprint.route('/add', methods=['GET','POST'])
+@blog_blueprint.route('/add', methods=['GET', 'POST'])
 @login_required
 @permission_required(Permission.WRITE_POSTS)
 def add():
@@ -48,6 +54,7 @@ def add():
     if form.validate_on_submit():
         post = Post(
             title=form.title.data,
+            description=form.description.data,
             content=form.body.data,
             author=current_user._get_current_object())
         db.session.add(post)

@@ -2,27 +2,29 @@
 (c) 2014 by Brijesh Bittu
 """
 from app import db
-from markdown import markdown
-import bleach
+from ..utilities import create_post_from_md
 
 TYPE_POST = 1
 TYPE_PAGE = 2
+
 
 class BaseModel(db.Model):
     __abstract__ = True
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    modified_at = db.Column(db.DateTime, default=db.func.current_timestamp(),\
+    modified_at = db.Column(db.DateTime, default=db.func.current_timestamp(),
                             onupdate=db.func.current_timestamp())
 
 
-tags_posts = db.Table('tags_posts',
+tags_posts = db.Table(
+    'tags_posts',
     db.Column('id', db.Integer, primary_key=True),
     db.Column('tag_id', db.Integer, db.ForeignKey('tags.id')),
     db.Column('post_id', db.Integer, db.ForeignKey('posts.id'))
 )
 
-categories_posts = db.Table('categories_posts',
+categories_posts = db.Table(
+    'categories_posts',
     db.Column('id', db.Integer, primary_key=True),
     db.Column('category_id', db.Integer, db.ForeignKey('categories.id')),
     db.Column('post_id', db.Integer, db.ForeignKey('posts.id'))
@@ -54,10 +56,14 @@ class Post(BaseModel):
     body = db.Column(db.Text)
     status = db.Column(db.Boolean, default=True)
     body_html = db.Column(db.Text)
-    tags = db.relationship('Tag', secondary=tags_posts,
-        backref=db.backref('posts', lazy='dynamic'))
-    categories = db.relationship('Category', secondary=categories_posts,
-        backref=db.backref('posts', lazy='dynamic'))
+    tags = db.relationship(
+        'Tag', secondary=tags_posts,
+        backref=db.backref('posts', lazy='dynamic')
+    )
+    categories = db.relationship(
+        'Category', secondary=categories_posts,
+        backref=db.backref('posts', lazy='dynamic')
+    )
 
     @property
     def content(self):
@@ -66,13 +72,7 @@ class Post(BaseModel):
     @content.setter
     def content(self, body):
         self.body = body
-        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
-                        'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
-                        'h2', 'h3', 'p']
-        self.body_html = bleach.linkify(bleach.clean(
-            markdown(body, output_format='html5'),
-            tags=allowed_tags, strip=True
-        ))
+        self.body_html = create_post_from_md(body)
 
     @property
     def html(self):
@@ -80,13 +80,7 @@ class Post(BaseModel):
 
     @staticmethod
     def on_change_body(target, value, oldvalue, initiator):
-        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
-                        'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
-                        'h2', 'h3', 'p']
-        target.body_html = bleach.linkify(bleach.clean(
-            markdown(value, output_format='html'),
-            tags=allowed_tags, strip=True
-        ))
+        target.body_html = create_post_from_md(value)
 
     @staticmethod
     def generate_fake(count=100):
@@ -102,7 +96,6 @@ class Post(BaseModel):
             )
             db.session.add(p)
         db.session.commit()
-
 
 
 db.event.listen(Post.body, 'set', Post.on_change_body)

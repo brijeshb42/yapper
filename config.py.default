@@ -3,7 +3,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    APP_NAME = 'Bloggy'
+    APP_NAME = 'Yapper'
     TABLE_PREFIX = 'cms'
     USER_PREFIX = '/u'
     BLOG_PREFIX = '/blog'
@@ -13,6 +13,7 @@ class Config:
     WTF_CSRF_ENABLED = True
     WTF_CSRF_SECRET_KEY = os.environ.get('CSRF_KEY') or 'secretcsrf'
     POSTS_PER_PAGE = 10
+    DOMAINS = ['bittu.me', 'bitwiser.in']
 
     @staticmethod
     def init_app(app):
@@ -26,15 +27,20 @@ class DevConfig(Config):
 
 
 class TestConfig(Config):
+    DEBUG = True
     TESTING = True
     WTF_CSRF_ENABLED = False
     CSRF_ENABLED = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-test.db')
 
 
 class ProdConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
+    DEBUG = False
+    TESTING = False
+    WTF_CSRF_ENABLED = True
+    CSRF_ENABLED = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-prod.db')
 
 

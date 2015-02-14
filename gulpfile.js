@@ -35,7 +35,7 @@ var src = './templates/assets/',
 
 
 /* styles */
-gulp.task('styles', function (){
+gulp.task('styles', function () {
     return gulp.src(src+'css/style.scss')
         .pipe(plumber(function (e) {
             console.log('There was an issue compiling Sass');
@@ -48,6 +48,11 @@ gulp.task('styles', function (){
         }))
         .pipe(gulp.dest(dest+'css'))
         .pipe(livereload());
+});
+
+gulp.task('copyfiles', function() {
+    return gulp.src(src+'css/*.css')
+        .pipe(gulp.dest(dest+'/css'));
 });
 
 
@@ -116,10 +121,10 @@ gulp.task('usemin', ['bower'], function(){
 
 /* clean */
 gulp.task('clean', function(cb){
-    del([dest, 'templates/assets/vendor/'], cb);
+    return del([dest, 'templates/assets/vendor/'], cb);
 });
 gulp.task('clean-dist', function(cb){
-    del([dest+'css/**/*.min.css', dest+'js/**/*.min.js'], cb);
+    return del([dest+'css/**/*.min.css', dest+'js/**/*.min.js'], cb);
 });
 
 
@@ -127,7 +132,7 @@ gulp.task('flask', function(){
     var spawn = process.spawn;
     console.info('Starting flask server');
     var PIPE = {stdio: 'inherit'};
-    spawn('python', ['manage.py','runserver','-h','0.0.0.0'], PIPE);
+    spawn('python', ['manage.py','runserver','-h','127.0.0.1'], PIPE);
 });
 
 
@@ -155,9 +160,12 @@ gulp.task('watch', function() {
     // Watch .js files
     gulp.watch(src+'js/**/*.js', ['scripts']);
 
+    // Watch static files
+    gulp.watch([src+'css/**/*.css', src+'js/**/*.js'], ['copyfiles']);
+
     // Watch template changes
-    gulp.watch('./templates/base1.html', ['usemin']);
-    gulp.watch('./app/templates/**/*.html', livereload.reload);
+    gulp.watch(htmlSrc + 'base1.html', ['usemin']);
+    gulp.watch(htmlDest + '**/*.html', livereload.reload);
 });
 
 
@@ -166,7 +174,7 @@ gulp.task('dist', ['clean'], function() {
 });
 
 gulp.task('default', ['clean'], function() {
-    gulp.start('styles', 'scripts', 'usemin');
+    gulp.start('styles', 'copyfiles', 'scripts', 'usemin');
 });
 
 gulp.task('serve',['default'], function(){

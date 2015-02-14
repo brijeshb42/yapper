@@ -1,0 +1,11 @@
+.btn {
+    background: lighten($base-color, 10%);
+    padding: 4px 8px;
+    color: #fff;
+    border: 1px solid darken($base-color, 10%);
+    transition: all 0.1s ease-in;
+
+    &:active {
+        background: $base-color;
+    }
+}

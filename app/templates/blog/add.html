@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
-{% from '_helpers.html' import render_field %}
-{% block title %}New Post{% endblock %}
-{% block content %}
+{%- from '_helpers.html' import render_field -%}
+{%- block title %}New Post{% endblock -%}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colorful.css') }}">
+{% endblock %}
+{%- block content %}
     <form action="{{ url_for('blog.add') }}" method="post">
     {{ form.hidden_tag() }}
     {{ render_field(form.title) }}
+    {{ render_field(form.description) }}
     {{ render_field(form.body) }}
-    {{ form.submit }}
+    {{ form.submit(class='btn') }}
     </form>
-{% endblock %}
+{% endblock -%}
