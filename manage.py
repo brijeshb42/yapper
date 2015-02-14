@@ -14,7 +14,11 @@ migrate = Migrate(app, db)
 
 
 def make_shell_context():
-    return dict(app=app, db=db, User=User, Role=Role, Post=Post, Tag=Tag, Category=Category)
+    return dict(
+        app=app, db=db,
+        User=User, Role=Role, Post=Post,
+        Tag=Tag, Category=Category
+    )
 
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
@@ -28,6 +32,7 @@ def test():
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+
 @manager.command
 def init():
     """Enter initial data"""
@@ -38,7 +43,11 @@ def init():
     db.session.commit()
     u = User.query.filter_by(email=app.config['FLASKY_ADMIN']).first()
     if u is None:
-        u = User(email=app.config['FLASKY_ADMIN'], password='testpass', name='Admin')
+        u = User(
+            email=app.config['FLASKY_ADMIN'],
+            password='testpass',
+            name='Admin'
+        )
         db.session.add(u)
         db.session.commit()
     print('DB initialized')

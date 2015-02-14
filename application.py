@@ -1,5 +1,13 @@
-import app
+import os
+
+import app as application
+
+env = os.getenv('FLASK_ENV')
+
+if env is None:
+    env = 'dev'
+
+app = application.create_app(env)
 
 if __name__ == '__main__':
-    ap = app.create_app('dev')
-    ap.run(port=8080, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)
