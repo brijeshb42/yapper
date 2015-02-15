@@ -7,6 +7,7 @@ from app import create_app, db
 from app.user.models import Role, User
 from app.blog.models import Post
 
+
 class LoginTestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app('test')
@@ -19,7 +20,7 @@ class LoginTestCase(unittest.TestCase):
         role = Role.query.filter_by(name='user').first()
         user = User(
                 name='Test User',
-                email='test@mail.com',\
+                email='test@mail.com',
                 password='testpass',
                 status=True,
                 role=role
@@ -46,21 +47,21 @@ class LoginTestCase(unittest.TestCase):
         assert len(p) is 0
 
     def test_can_login(self):
-        rv = self.login('test@mail.com','testpass')
+        rv = self.login('test@mail.com', 'testpass')
         assert 'Test User' in rv.data
         rv = self.logout()
         assert 'logged out' in rv.data
-        rv = self.login('tets@gmail.com','po')
+        rv = self.login('tets@gmail.com', 'po')
         assert 'Invalid combination' in rv.data
 
     def test_add_post(self):
-        self.login('test@mail.com','testpass')
+        self.login('test@mail.com', 'testpass')
         rv = self.client.post('/blog/add', data=dict(
             title='Title',
+            description='Desc',
             body='## hello'
             ), follow_redirects=True)
         assert '<h2>hello</h2>' in rv.data
 
         rv = self.client.get('/blog/12')
         assert rv.status_code == 404
-

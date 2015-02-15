@@ -58,6 +58,7 @@ def add():
             content=form.body.data,
             author=current_user._get_current_object())
         db.session.add(post)
+        print('Post added')
         flash(u'Post added')
         return redirect(url_for('.index'))
     return render_template('blog/add.html', form=form)

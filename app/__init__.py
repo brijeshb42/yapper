@@ -1,10 +1,15 @@
 """
 (c) 2014 by Brijesh Bittu
 """
+import logging
+
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 # from flask_wtf import CsrfProtect
+
+from werkzeug.contrib.fixers import ProxyFix
+
 from config import config
 
 db = SQLAlchemy()
@@ -15,6 +20,8 @@ login_manager.login_view = 'user.login'
 login_manager.login_message_category = 'info'
 
 
+"""
+commented for now
 class ReverseProxied(object):
     '''Wrap the application in this middleware and configure the
     front-end server to add these headers, to let you quietly bind
@@ -46,7 +53,7 @@ class ReverseProxied(object):
         scheme = environ.get('HTTP_X_SCHEME', '')
         if scheme:
             environ['wsgi.url_scheme'] = scheme
-        return self.app(environ, start_response)
+        return self.app(environ, start_response)"""
 
 
 def create_app(config_name):
@@ -57,7 +64,14 @@ def create_app(config_name):
     # csrf.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
-    app.wsgi_app = ReverseProxied(app.wsgi_app)
+    app.wsgi_app = ProxyFix(app.wsgi_app)
+
+    @app.before_first_request
+    def setup_logging():
+        if not app.debug:
+            # In production mode, add log handler to sys.stderr.
+            app.logger.addHandler(logging.StreamHandler())
+            app.logger.setLevel(logging.INFO)
 
     from .main import main_blueprint
     from .user import user_blueprint
