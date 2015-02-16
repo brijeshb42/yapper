@@ -2,7 +2,8 @@
 {% extends 'base.html' %}
 {%- block meta %}
 {%- if posts|length == 1 %}
-<meta name="description" content="{{ posts[0].description }}">
+<meta name="description" content="{{- posts[0].description -}}">
+<meta name="author" content="{{- posts[0].author.name -}}">
 {%- else %}
 <meta name="description" content="Page of posts">
 {%- endif %}
