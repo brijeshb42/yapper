@@ -10,7 +10,7 @@ from config import Config
 def externallify_url(attrs, new=False):
     p = urlparse(attrs['href'])
     if p.netloc not in Config.DOMAINS:
-        attrs['rel'] = 'nofollow'
+        # attrs['rel'] = 'nofollow'
         attrs['target'] = '_blank'
         attrs['class'] = 'external'
     else:
