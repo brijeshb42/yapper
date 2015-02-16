@@ -5,8 +5,9 @@ from app import db
 from werkzeug.security import generate_password_hash, \
     check_password_hash
 from flask.ext.login import UserMixin, AnonymousUserMixin
-#from config import Config
+# from config import Config
 from app import login_manager
+
 
 class Permission:
     WRITE_POSTS = 0x01
@@ -16,17 +17,18 @@ class Permission:
 
     @staticmethod
     def user():
-        return (Permission.WRITE_POSTS,True)
+        return (Permission.WRITE_POSTS, True)
 
     @staticmethod
     def admin():
         return (Permission.ADMIN, False)
 
+
 class BaseModel(db.Model):
     __abstract__ = True
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    modified_at = db.Column(db.DateTime, default=datetime.utcnow,\
+    modified_at = db.Column(db.DateTime, default=datetime.utcnow,
                             onupdate=datetime.utcnow)
 
 
@@ -55,7 +57,8 @@ class Role(BaseModel):
             db.session.add(role)
         db.session.commit()
 
-class User(UserMixin,BaseModel):
+
+class User(UserMixin, BaseModel):
     __tablename__ = 'users'
     name = db.Column(db.String(64))
     email = db.Column(db.String(64), unique=True, index=True)
@@ -68,10 +71,12 @@ class User(UserMixin,BaseModel):
         super(User, self).__init__(**kwargs)
         if self.role is None:
             if self.email == current_app.config['FLASKY_ADMIN']:
-                self.role = Role.query.filter_by(permissions = Permission.ADMIN).first()
+                self.role = Role.query.filter_by(
+                    permissions=Permission.ADMIN
+                ).first()
                 self.status = True
             if self.role is None:
-                self.role = Role.query.filter_by(default = True).first()
+                self.role = Role.query.filter_by(default=True).first()
 
     @property
     def password(self):
@@ -82,7 +87,7 @@ class User(UserMixin,BaseModel):
         self.password_hash = generate_password_hash(password)
 
     def verify_password(self, password):
-        return  check_password_hash(self.password_hash, password)
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return '<User %s>' % self.email
@@ -98,7 +103,7 @@ class User(UserMixin,BaseModel):
         return self.can(Permission.ADMIN)
 
     def is_confirmed(self):
-        return self.status is not None and self.status == True
+        return self.status is not None and self.status is True
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -115,8 +120,8 @@ class AnonymousUser(AnonymousUserMixin):
         return False
 
 
-
 login_manager.anonymous_user = AnonymousUser
+
 
 @login_manager.user_loader
 def load_user(user_id):

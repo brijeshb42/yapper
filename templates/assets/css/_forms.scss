@@ -1,28 +1,38 @@
 .form-errors {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 
-    li {
-        display: inline-block;
-        margin: 2px 2px 2px 0; 
-        padding: 2px 4px;
-        background: $alert-error-bgcolor;
-        color: $alert-error-txtcolor;
-        border: 1px solid $alert-error-bordercolor;
-        font-size: 0.8em;
-    }
+  li {
+    background: $alert-error-bgcolor;
+    border: 1px solid $alert-error-bordercolor;
+    color: $alert-error-txtcolor;
+    display: inline-block;
+    font-size: .8em;
+    margin: 2px 2px 2px 0; 
+    padding: 2px 4px;
+  }
 }
 
 .form-field {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 
-    input, textarea {
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
+  input,
+  textarea {
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    display: block;
+    transition: all .2s ease;
+    width: 100%;
+
+    &:focus {
+      border-color: $base-color;
+      outline: none;
     }
-    textarea {
-        height: 100px;
-    }
+  }
+
+}
+
+.post-content {
+  height: 500px;
 }

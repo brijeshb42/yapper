@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{%- block title %}{% endblock -%} | {{- config.APP_NAME -}}</title>
+    <title>{%- block title %}{%- endblock %}&nbsp; | &nbsp;{{- config.APP_NAME -}}</title>
     {%- block meta %}
     <meta name="description" content="Description">
     <meta name="HandheldFriendly" content="True" />
@@ -40,25 +40,26 @@
         {% endfor %}
         </div>
       {% endif %}
-    {% endwith -%}
+    {%- endwith %}
     
-    {%- block content %}{% endblock -%}
+    <div class="unit whole">{%- block content %}{%- endblock %}</div>
+    {%- block sidebar %}{%- endblock %}
     </section>
     
     <footer>
     {%- block footer %}{% endblock -%}
     </footer>
-    {% block scripts %}
+    {%- block scripts %}
     <script src="{{ url_for('static', filename='js/vendor.js') }}"></script>
     <script src="{{ url_for('static', filename='js/all.js') }}"></script>
-    {% endblock %}
+    {%- endblock %}
     
-    {% if config.DEBUG %}
+    {%- if config.DEBUG %}
     <!-- livereload script -->
     <script>document.write('<script src="http://'
      + (location.host || 'localhost').split(':')[0]
      + ':35729/livereload.js?snipver=1" type="text/javascript"><\/script>')
     </script>
-    {% endif %}
+    {%- endif %}
 </body>
 </html>

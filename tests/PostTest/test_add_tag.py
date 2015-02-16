@@ -3,6 +3,7 @@ from app import db, create_app
 from app.blog.models import Post, Tag, Category
 from app.user.models import User
 
+
 class TagAddTestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app('test')
@@ -34,10 +35,15 @@ class TagAddTestCase(unittest.TestCase):
             title='Test Post',
             content='# Hello text <script>h</script>\n\n**hello**\n\n'
         )
-        assert '<h1>Hello text h</h1>\n<p><strong>hello</strong></p>' in post.html
+        assert '<h1>Hello text h</h1>\n<p><strong>hello</strong></p>' \
+            in post.html
 
     def test_post_creation(self):
-        u = User(email=self.app.config['FLASKY_ADMIN'], password='testpass', name='Admin')
+        u = User(
+            email=self.app.config['FLASKY_ADMIN'],
+            password='testpass',
+            name='Admin'
+        )
         tag = Tag(name='node.js')
         cat = Category(name='node.js')
         db.session.add(u)

@@ -161,7 +161,7 @@ gulp.task('watch', function() {
     gulp.watch(src+'js/**/*.js', ['scripts']);
 
     // Watch static files
-    gulp.watch([src+'css/**/*.css', src+'js/**/*.js'], ['copyfiles']);
+    gulp.watch(src+'css/**/*.css', ['copyfiles']);
 
     // Watch template changes
     gulp.watch(htmlSrc + 'base1.html', ['usemin']);

@@ -6,18 +6,21 @@ from .models import User, Role
 
 
 class LoginForm(Form):
-    email = StringField('Email', validators=[DataRequired(),\
-            Length(1,64), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Log In')
+    email = StringField(u'Email', validators=[DataRequired(),
+                        Length(1, 64), Email()])
+    password = PasswordField(u'Password', validators=[DataRequired()])
+    remember_me = BooleanField(u'Remember Me')
+    submit = SubmitField(u'Log In')
 
 
 class RegisterForm(Form):
     name = StringField(u'Your Name', validators=[DataRequired()])
-    email = StringField(u'Email', validators=[DataRequired(),\
-            Length(1,64), Email()])
-    password = PasswordField(u'Password', validators=[DataRequired(), EqualTo('cpassword', message=u'Both passwords should be same')])
+    email = StringField(u'Email', validators=[DataRequired(),
+                        Length(1, 64), Email()])
+
+    password = PasswordField(u'Password', validators=[DataRequired(),
+                             EqualTo('cpassword',
+                             message=u'Both passwords should be same')])
     cpassword = PasswordField(u'Confirm Password', validators=[DataRequired()])
     role = SelectField(u'Role', coerce=int)
     confirm = BooleanField(u'Register With Confirmation?')
@@ -25,7 +28,9 @@ class RegisterForm(Form):
 
     def __init__(self, **kwargs):
         super(RegisterForm, self).__init__(**kwargs)
-        self.role.choices = [(r.id, r.name) for r in Role.query.with_entities(Role.id, Role.name).all()]
+        self.role.choices = [(r.id, r.name)
+                             for r in Role.query.with_entities(
+                                Role.id, Role.name).all()]
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():

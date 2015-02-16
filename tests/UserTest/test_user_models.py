@@ -33,12 +33,12 @@ class UserModelTestCase(unittest.TestCase):
 
     def test_roles_and_permissions(self):
         Role.insert_roles()
-        u = User(email = 'brijeshb2@gmail.com', password='adt')
+        u = User(email='brijeshb2@gmail.com', password='adt')
         self.assertTrue(u.can(Permission.WRITE_POSTS))
 
     def test_admin(self):
         Role.insert_roles()
-        u = User(email = 'admin@example.com', password='adt')
+        u = User(email='admin@example.com', password='adt')
         self.assertTrue(u.is_admin())
 
     def test_anon_user(self):

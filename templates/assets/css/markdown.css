@@ -342,7 +342,7 @@
 .markdown-body table,
 .markdown-body pre {
   margin-top: 0;
-  margin-bottom: 16px;
+  /*margin-bottom: 16px;*/
 }
 
 .markdown-body hr {
@@ -415,7 +415,7 @@
 
 .markdown-body table th,
 .markdown-body table td {
-  padding: 6px 13px;
+  padding: 2px;
   border: 1px solid #ddd;
 }
 
@@ -466,7 +466,7 @@
 
 .markdown-body .highlight pre,
 .markdown-body pre {
-  padding: 16px;
+  /*padding: 16px;*/
   overflow: auto;
   font-size: 85%;
   line-height: 1.45;
