@@ -13,7 +13,7 @@ class Config:
     WTF_CSRF_ENABLED = True
     WTF_CSRF_SECRET_KEY = os.environ.get('CSRF_KEY') or 'secretcsrf'
     POSTS_PER_PAGE = 10
-    DOMAINS = ['bittu.me', 'bitwiser.in']
+    DOMAINS = ['domain1.com', 'domain1.com']
 
     @staticmethod
     def init_app(app):
