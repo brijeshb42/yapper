@@ -1,4 +1,5 @@
-.linenodiv { margin-right: 5px; background: #f8f8f8}
+.linenodiv { padding: 0 2px; background: #f8f8f8}
+.codehilite { padding-left: 2px}
 .codehilite .hll { background-color: #ffffcc }
 .codehilite .c { color: #808080 } /* Comment */
 .codehilite .err { color: #F00000; background-color: #F0A0A0 } /* Error */
