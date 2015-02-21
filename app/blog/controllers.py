@@ -55,7 +55,7 @@ def edit_post(pid=None):
         post.content = form.body.data
         db.session.add(post)
         db.session.commit()
-        flash(u'Post Updated')
+        flash(u'Post Updated', 'success')
         return redirect(url_for('.get_post', pid=post.id))
     
     form.title.data = post.title
