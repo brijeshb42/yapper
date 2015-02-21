@@ -29,18 +29,29 @@ def dont_linkify_urls(attrs, new=False):
 
 
 def create_post_from_md(body):
-    allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
-                    'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
-                    'h2', 'h3', 'p', 'span']
+    # allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+    #                'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
+    #                'h2', 'h3', 'p', 'span']
     return bleach.linkify(
         markdown(
-            bleach.clean(
-                body,
-                tags=allowed_tags, strip=True
-            ),
+            body,
             output_format='html5',
             extensions=['codehilite(linenums=True)']
         ),
         callbacks=[externallify_url, dont_linkify_urls],
         skip_pre=True
     )
+    """
+    Previous version of the function
+    return bleach.linkify(
+        markdown(
+            bleach.clean(
+                body,
+                tags=allowed_tags
+            ),
+            output_format='html5',
+            extensions=['codehilite(linenums=True)']
+        ),
+        callbacks=[externallify_url, dont_linkify_urls],
+        skip_pre=True
+    )"""
