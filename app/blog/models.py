@@ -1,6 +1,3 @@
-"""
-(c) 2014 by Brijesh Bittu
-"""
 from app import db
 from ..utilities import create_post_from_md
 

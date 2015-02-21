@@ -1,6 +1,3 @@
-"""
-(c) 2014 by Brijesh Bittu
-"""
 from flask import current_app, redirect, url_for, render_template, \
     flash, request
 from app import db

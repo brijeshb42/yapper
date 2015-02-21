@@ -1,6 +1,3 @@
-"""
-(c) 2014 by Brijesh Bittu
-"""
 from flask.ext.wtf import Form
 from wtforms.fields import StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Length

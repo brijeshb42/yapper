@@ -1,6 +1,3 @@
-"""
-(c) 2014 by Brijesh Bittu
-"""
 from functools import wraps
 from flask import abort
 from flask.ext.login import current_user

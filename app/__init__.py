@@ -1,6 +1,3 @@
-"""
-(c) 2014 by Brijesh Bittu
-"""
 import logging
 
 from flask import Flask
