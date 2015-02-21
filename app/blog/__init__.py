@@ -1,6 +1,3 @@
-"""
-(c) 2014 by Brijesh Bittu
-"""
 from flask import Blueprint
 
 BP_NM = 'blog'
