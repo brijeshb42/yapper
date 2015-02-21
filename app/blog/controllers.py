@@ -48,8 +48,11 @@ def get_post(pid=None, slug=None):
 @permission_required(Permission.WRITE_POSTS)
 def edit_post(pid=None):
     form = PostForm()
+    post = Post.query.get_or_404(pid)
+    if post.author.id != current_user.id or not current_user.is_admin():
+        flash(u'You cannot edit this post.', 'error')
+        return redirect(url_for('.get_post', pid=pid))
     if form.validate_on_submit():
-        post = Post.query.get_or_404(pid)
         post.title = form.title.data
         post.description = form.description.data
         post.content = form.body.data
@@ -57,10 +60,7 @@ def edit_post(pid=None):
         db.session.commit()
         flash(u'Post Updated')
         return redirect(url_for('.get_post', pid=post.id))
-    post = Post.query.get_or_404(pid)
-    if post.author.id != current_user.id or not current_user.is_admin():
-        flash(u'You cannot edit this post.', 'error')
-        return redirect(url_for('.get_post', pid=pid)), 403
+    
     form.title.data = post.title
     form.description.data = post.description
     form.body.data = post.body
@@ -81,7 +81,7 @@ def delete(pid):
         flash(u'Post deleted.', 'success')
         return redirect(url_for('.index'))
     flash(u'You cannot delete this post.', 'error')
-    return redirect(url_for('.index')), 403
+    return redirect(url_for('.index'))
 
 
 @blog_blueprint.route('/add', methods=['GET', 'POST'])
