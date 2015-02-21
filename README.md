@@ -14,3 +14,10 @@
     * ```python manage.py db migrate```
     * ```python manage.py db update```
 * Run local server ```gulp serve```.
+
+
+## TODO
+
+* Documentation of functionalities that have been added.
+* New UI and functionality for adding blog post with tags, categories, description, slug and status(draft or published).
+* Theming support (if possible).
