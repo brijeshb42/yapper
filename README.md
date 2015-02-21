@@ -15,6 +15,10 @@
     * ```python manage.py db update```
 * Run local server ```gulp serve```.
 
+* Pull requests are welcome :thumbsup: .
+
+## Issues
+* Report issues or suggestions [here](https://github.com/brijeshb42/yapper/issues/new).
 
 ## TODO
 
