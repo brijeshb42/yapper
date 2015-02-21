@@ -2,6 +2,7 @@
   "name": "Yapper",
   "version": "1.0.0",
   "description": "flask blog",
+  "homepage": "https://github.com/brijeshb42/yapper",
   "directories": {
     "test": "tests"
   },
