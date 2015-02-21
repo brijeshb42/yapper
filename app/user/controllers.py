@@ -58,6 +58,7 @@ def signup():
             status=form.confirm.data
         )
         db.session.add(user)
+        db.session.commit()
         flash(u'You have been registered', 'success')
         return redirect(url_for('main.index'))
     return render_template('user/signup.html', form=form)
