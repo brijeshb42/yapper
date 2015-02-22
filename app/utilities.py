@@ -8,6 +8,12 @@ from config import Config
 
 
 def externallify_url(attrs, new=False):
+    """Open external urls in new tab.
+
+    This is a callback function used by bleach.linkify().
+    Add attribute target=_blank in all the urls that are not
+    from the domains in Config.DOMAINS
+    """
     p = urlparse(attrs['href'])
     if p.netloc not in Config.DOMAINS:
         # attrs['rel'] = 'nofollow'
@@ -19,6 +25,12 @@ def externallify_url(attrs, new=False):
 
 
 def dont_linkify_urls(attrs, new=False):
+    """Prevent file extensions to convert to links.
+
+    This is a callback function used by bleach.linkify().
+    Prevent strings ending with substrings in `file_exts` to be
+    converted to links unless it starts with http or https.
+    """
     file_exts = ('.py', '.md', '.sh')
     txt = attrs['_text']
     if txt.startswith(('http:', 'https:')):
@@ -29,6 +41,7 @@ def dont_linkify_urls(attrs, new=False):
 
 
 def create_post_from_md(body):
+    """Parse markdown and linkify urls."""
     # allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
     #                'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
     #                'h2', 'h3', 'p', 'span']
