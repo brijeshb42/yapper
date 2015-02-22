@@ -13,7 +13,8 @@ class Config:
     WTF_CSRF_ENABLED = True
     WTF_CSRF_SECRET_KEY = os.environ.get('CSRF_KEY') or 'secretcsrf'
     POSTS_PER_PAGE = 10
-    DOMAINS = ['domain1.com', 'domain1.com']
+    GA_TRACKING_ID = None
+    DOMAINS = ['domain1.com', 'domain2.com']
 
     @staticmethod
     def init_app(app):
@@ -40,6 +41,7 @@ class ProdConfig(Config):
     TESTING = False
     WTF_CSRF_ENABLED = True
     CSRF_ENABLED = True
+    GA_TRACKING_ID = 'UA-12345678-1'
     SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-prod.db')
 
