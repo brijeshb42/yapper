@@ -1,3 +1,4 @@
+{%- from '_helpers.html' import ga_tracking -%}
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,7 +53,7 @@
     <script src="{{ url_for('static', filename='js/vendor.js') }}"></script>
     <script src="{{ url_for('static', filename='js/all.js') }}"></script>
     {%- endblock %}
-    
+    {{- ga_tracking() -}}
     {%- if config.DEBUG %}
     <!-- livereload script -->
     <script>document.write('<script src="http://'
