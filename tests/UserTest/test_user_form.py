@@ -73,5 +73,5 @@ class UserFormTestCase(unittest.TestCase):
         rv = self.logout()
         rv = self.login('test@example.com', 'testpass')
         rv = self.client.delete('/blog/1', follow_redirects=True)
-        assert rv.status_code == 403
+        assert 'You cannot delete this post' in rv.data
 

@@ -30,14 +30,6 @@ class TagAddTestCase(unittest.TestCase):
         db.session.commit()
         self.assertTrue(cat.id >= 1)
 
-    def test_post_validity(self):
-        post = Post(
-            title='Test Post',
-            content='# Hello text <script>h</script>\n\n**hello**\n\n'
-        )
-        assert '<h1>Hello text h</h1>\n<p><strong>hello</strong></p>' \
-            in post.html
-
     def test_post_creation(self):
         u = User(
             email=self.app.config['FLASKY_ADMIN'],
