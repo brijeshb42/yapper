@@ -1,8 +1,10 @@
 from urlparse import urlparse
 
 from markdown import markdown
-from markdown.extensions.codehilite import CodeHilite
+from pyembed.markdown import PyEmbedMarkdown
 import bleach
+
+from extensions import LazyYoutubeExtension
 
 from config import Config
 
@@ -31,13 +33,14 @@ def dont_linkify_urls(attrs, new=False):
     Prevent strings ending with substrings in `file_exts` to be
     converted to links unless it starts with http or https.
     """
-    file_exts = ('.py', '.md', '.sh')
-    txt = attrs['_text']
-    if txt.startswith(('http:', 'https:')):
-        return attrs
-    if txt.endswith(file_exts):
-        return None
-    return attrs
+    return None
+    """file_exts = ('.py', '.md', '.sh')
+                txt = attrs['_text']
+                if txt.startswith(('http:', 'https:')):
+                    return attrs
+                if txt.endswith(file_exts):
+                    return None
+                return attrs"""
 
 
 def create_post_from_md(body):
@@ -45,26 +48,12 @@ def create_post_from_md(body):
     # allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
     #                'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
     #                'h2', 'h3', 'p', 'span']
-    return bleach.linkify(
-        markdown(
-            body,
-            output_format='html5',
-            extensions=['codehilite(linenums=True)']
-        ),
-        callbacks=[externallify_url, dont_linkify_urls],
-        skip_pre=True
+    return markdown(
+        body,
+        output_format='html5',
+        extensions=[
+            'codehilite(linenums=True)',
+            PyEmbedMarkdown(),
+            LazyYoutubeExtension()
+        ]
     )
-    """
-    Previous version of the function
-    return bleach.linkify(
-        markdown(
-            bleach.clean(
-                body,
-                tags=allowed_tags
-            ),
-            output_format='html5',
-            extensions=['codehilite(linenums=True)']
-        ),
-        callbacks=[externallify_url, dont_linkify_urls],
-        skip_pre=True
-    )"""

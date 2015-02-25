@@ -1,6 +1,3 @@
-"""
-(c) 2014 by Brijesh Bittu
-"""
 import unittest
 from app import create_app, db
 from app.user.models import User, Role
@@ -29,7 +26,7 @@ class TestUserAddToDb(unittest.TestCase):
         role = Role(name='admin')
         db.session.add(role)
         db.session.commit()
-        user = User(email='b2@gmail.com',password='1234',role=role)
+        user = User(email='b2@gmail.com', password='1234', role=role)
         self.assertFalse(role.id is None)
         self.assertTrue(user.id is None)
         db.session.add(user)

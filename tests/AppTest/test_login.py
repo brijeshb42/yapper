@@ -1,6 +1,3 @@
-"""
-(c) 2014 by Brijesh Bittu
-"""
 import unittest
 from flask import current_app
 from app import create_app, db

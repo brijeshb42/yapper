@@ -7,7 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "python manage.py test"
+    "test": "python manage.py test",
+    "start": "gulp serve"
   },
   "repository": {
     "type": "git",

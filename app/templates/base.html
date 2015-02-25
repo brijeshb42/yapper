@@ -19,6 +19,7 @@
         <h1><a href="/">{{- config.APP_NAME -}}</a></h1>
         <nav class="grid wrap">
             <ul>
+            <li><a href="{{ url_for('blog.index') }}">Posts</a></li>
             {%- if current_user.is_authenticated() %}
             <li><a href="#">{{ current_user.name }}</a></li>
             <li><a href="{{ url_for('blog.add') }}">Add Post</a></li>
@@ -27,7 +28,6 @@
             <li><a href="{{ url_for('user.login') }}">Login</a></li>
             <li><a href="{{ url_for('user.signup') }}">Sign Up</a></li>
             {% endif -%}
-            <li><a href="{{ url_for('blog.index') }}">Posts</a></li>
             </ul>
         </nav>
     </header>
@@ -53,13 +53,13 @@
     <script src="{{ url_for('static', filename='js/vendor.js') }}"></script>
     <script src="{{ url_for('static', filename='js/all.js') }}"></script>
     {%- endblock %}
-    {{- ga_tracking() -}}
     {%- if config.DEBUG %}
     <!-- livereload script -->
     <script>document.write('<script src="http://'
      + (location.host || 'localhost').split(':')[0]
      + ':35729/livereload.js?snipver=1" type="text/javascript"><\/script>')
     </script>
-    {%- endif %}
+    {% endif -%}
+    {{- ga_tracking() -}}
 </body>
 </html>

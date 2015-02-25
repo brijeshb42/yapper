@@ -1,5 +1,5 @@
 from app import db
-from ..utilities import create_post_from_md
+from app.utilities.md import create_post_from_md
 
 TYPE_POST = 1
 TYPE_PAGE = 2

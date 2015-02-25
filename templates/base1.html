@@ -1,57 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block title %}{% endblock %} - {{ config.APP_NAME }}</title>
-    {% block meta %}
-    <meta name="description" content="Description">
-    {% endblock %}
-    {% block styles %}
+    <title>TITLE</title>
     <!-- build:css ../static/css/vendor.css -->
     <link rel="stylesheet" href="/assets/vendor/normalize.css/normalize.css"/>
     <link rel="stylesheet" href="/assets/vendor/gridism/gridism.css"/>
     <!-- endbuild -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-    {% endblock %}
 </head>
 <body>
     <header>
-        <h1>{{ config.APP_NAME }}</h1>
+        <h1>APP_NAME</h1>
         <nav>
-            {% if current_user.is_authenticated() %}
-                {{ current_user.name }}
-                <a href="{{ url_for('blog.add') }}">Add Post</a>
-                <a href="{{ url_for('user.logout') }}">Logout</a>
-            {% else %}
-                <a href="{{ url_for('user.login') }}">Login</a>
-                <a href="{{ url_for('user.signup') }}">Sign Up</a>
-            {% endif %}
         <a href="{{ url_for('blog.index') }}">Posts</a>
         </nav>
     </header>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-
-    {% block scripts %}
     <!-- build:js ../static/js/vendor.js -->
-    <link rel="stylesheet" href="/assets/vendor/jquery/dist/jquery.js"/>
+    <link rel="stylesheet" href="/assets/vendor/jquery/dist/jquery.js" />
     <!-- endbuild -->
-    <script src="{{ url_for('static', filename='js/all.js') }}"></script>
-    {% endblock %}
-    
-    {% if config.DEBUG %}
-    <!-- livereload script -->
-    <script>document.write('<script src="http://'
-     + (location.host || 'localhost').split(':')[0]
-     + ':35729/livereload.js?snipver=1" type="text/javascript"><\/script>')
-    </script>
-    {% endif %}
 </body>
 </html>

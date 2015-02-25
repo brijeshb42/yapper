@@ -1,6 +1,3 @@
-"""
-(c) 2014 by Brijesh Bittu
-"""
 import unittest
 from flask import current_app
 from app import create_app, db
@@ -73,5 +70,5 @@ class UserFormTestCase(unittest.TestCase):
         rv = self.logout()
         rv = self.login('test@example.com', 'testpass')
         rv = self.client.delete('/blog/1', follow_redirects=True)
-        assert 'You cannot delete this post' in rv.data
+        assert rv.status_code == 403
 

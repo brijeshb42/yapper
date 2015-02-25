@@ -23,3 +23,16 @@ class PostForm(Form):
         validators=[DataRequired(message=u'Empty Post')]
     )
     submit = SubmitField(u'Add Post')
+
+
+class TagForm(Form):
+
+    """Form for tag/category creation."""
+
+    name = StringField(
+        u'Tag/Category Name',
+        validators=[
+            DataRequired(message=u'Empty name'),
+            Length(max=100, message=u'Maximum 100 characters')
+        ]
+    )
