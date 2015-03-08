@@ -1,3 +1,4 @@
+"""Flask application creation factory."""
 import logging
 
 from flask import Flask
@@ -54,6 +55,7 @@ class ReverseProxied(object):
 
 
 def create_app(config_name):
+    """App creation factory based on the FLASK_CONFIG env var."""
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)

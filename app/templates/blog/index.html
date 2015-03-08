@@ -13,6 +13,7 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/markdown.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/colorful.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lazyyt.css') }}">
 {%- endblock %}
 {% block content %}
     {% if posts|length > 0 %}
@@ -33,3 +34,7 @@
         <p>No post</p>
     {% endif %}
 {% endblock %}
+{%- block scripts %}
+    {{- super() -}}
+    <script src="{{- url_for('static', filename='js/lazyyt.v.js') -}}"></script>
+{% endblock -%}

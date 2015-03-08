@@ -50,9 +50,15 @@ gulp.task('styles', function () {
         .pipe(livereload());
 });
 
-gulp.task('copyfiles', function() {
+gulp.task('copyfiles-css', function() {
     return gulp.src(src+'css/*.css')
         .pipe(gulp.dest(dest+'/css'));
+});
+
+
+gulp.task('copyfiles-js', function() {
+    return gulp.src(src+'js/*.v.js')
+        .pipe(gulp.dest(dest+'/js'));
 });
 
 
@@ -161,7 +167,8 @@ gulp.task('watch', function() {
     gulp.watch(src+'js/**/*.js', ['scripts']);
 
     // Watch static files
-    gulp.watch(src+'css/**/*.css', ['copyfiles']);
+    gulp.watch(src+'css/**/*.css', ['copyfiles-css']);
+    gulp.watch(src+'css/**/*.v.js', ['copyfiles-js']);
 
     // Watch template changes
     gulp.watch(htmlSrc + 'base1.html', ['usemin']);
@@ -170,11 +177,11 @@ gulp.task('watch', function() {
 
 
 gulp.task('dist', ['clean'], function() {
-    gulp.start('styles-dist', 'copyfiles', 'scripts-dist', 'usemin');
+    gulp.start('styles-dist', 'copyfiles-css', 'copyfiles-js', 'scripts-dist', 'usemin');
 });
 
 gulp.task('default', ['clean'], function() {
-    gulp.start('styles', 'copyfiles', 'scripts', 'usemin');
+    gulp.start('styles', 'copyfiles-css', 'copyfiles-js', 'scripts', 'usemin');
 });
 
 gulp.task('serve',['default'], function(){

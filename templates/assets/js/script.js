@@ -1,3 +1,3 @@
-function hello(){
-    console.log('Hello world');
-}
+$(document).ready(function() {
+    $('.lazyYT').lazyYT();
+});
