@@ -8,9 +8,8 @@ except ImportError:
 
 
 LAZY_YT_PATTERN = '\[!lazyembed(\?(.*))?\]\((.*)\)'
-LAZY_YT_PLACEHOLDER = u"""
-<div class="lazyYT" data-youtube-id="%s" data-ratio="16:9">loading...</div>
-"""
+LAZY_YT_PLACEHOLDER = u'<div class="lazyYT" data-youtube-id="%s" ' \
+    'data-ratio="16:9">Loading video...</div>'
 
 
 class LazyYoutubePattern(Pattern):

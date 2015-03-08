@@ -14,33 +14,33 @@
     function setUp($el, settings) {
         var width = $el.data('width'),
             height = $el.data('height'),
-            ratio = ($el.data('ratio')) ? $el.data('ratio') : settings.default_ratio,
+            ratio = ($el.data('ratio')) ? $el.data('ratio') : settings.defaultRatio,
             id = $el.data('youtube-id'),
-            padding_bottom,
+            paddingBottom,
             innerHtml = [],
             $thumb,
-            thumb_img,
-            loading_text = $el.text() ? $el.text() : settings.loading_text,
-            youtube_parameters = $el.data('parameters') || '';
+            thumbImg,
+            loadingText = $el.text() ? $el.text() : settings.loadingText,
+            youtubeParameters = $el.data('parameters') || '';
         
         ratio = ratio.split(":");
         
-        // width and height might override default_ratio value
+        // width and height might override defaultRatio value
         if (typeof width === 'number' && typeof height === 'number') {
           $el.width(width);
-          padding_bottom = height + 'px';
+          paddingBottom = height + 'px';
         } else if (typeof width === 'number') {
           $el.width(width);
-          padding_bottom = (width * ratio[1] / ratio[0]) + 'px';
+          paddingBottom = (width * ratio[1] / ratio[0]) + 'px';
         } else {
           width = $el.width();
           
           // no width means that container is fluid and will be the size of its parent
-          if (width == 0) {
+          if (width === 0) {
             width = $el.parent().width();
           }
           
-          padding_bottom = (ratio[1] / ratio[0] * 100) + '%';
+          paddingBottom = (ratio[1] / ratio[0] * 100) + '%';
         }
         
         //
@@ -65,34 +65,34 @@
         innerHtml.push('<div class="html5-title">');
         innerHtml.push('<div class="html5-title-text-wrapper">');
         innerHtml.push('<a id="lazyYT-title-', id, '" class="html5-title-text" target="_blank" tabindex="3100" href="https://www.youtube.com/watch?v=', id, '">');
-        innerHtml.push(loading_text);
+        innerHtml.push(loadingText);
         innerHtml.push('</a>');
         innerHtml.push('</div>'); // .html5-title
         innerHtml.push('</div>'); // .html5-title-text-wrapper
         innerHtml.push('</div>'); // end of Video title .html5-info-bar
 
         $el.css({
-            'padding-bottom': padding_bottom
+            'padding-bottom': paddingBottom
         })
           .html(innerHtml.join(''));
         
         if (width > 640) {
-          //thumb_img = 'maxresdefault.jpg';
-          thumb_img = 'hqdefault.jpg';
+          //thumbImg = 'maxresdefault.jpg';
+          thumbImg = 'hqdefault.jpg';
         } else if (width > 480) {
-          thumb_img = 'sddefault.jpg';
+          thumbImg = 'sddefault.jpg';
         } else if (width > 320) {
-          thumb_img = 'hqdefault.jpg';
+          thumbImg = 'hqdefault.jpg';
         } else if (width > 120) {
-          thumb_img = 'mqdefault.jpg';
-        } else if (width == 0) { // sometimes it fails on fluid layout
-          thumb_img = 'hqdefault.jpg';
+          thumbImg = 'mqdefault.jpg';
+        } else if (width === 0) { // sometimes it fails on fluid layout
+          thumbImg = 'hqdefault.jpg';
         } else {
-          thumb_img = 'default.jpg';
+          thumbImg = 'default.jpg';
         }
         
         $thumb = $el.find('.ytp-thumbnail').css({
-            'background-image': ['url(http://img.youtube.com/vi/', id, '/', thumb_img, ')'].join('')
+            'background-image': ['url(http://img.youtube.com/vi/', id, '/', thumbImg, ')'].join('')
         })
           .addClass('lazyYT-image-loaded')
           .on('click', function (e) {
@@ -111,15 +111,15 @@
 
     $.fn.lazyYT = function (newSettings) {
       var defaultSettings = {
-        loading_text: 'Loading...',
-        default_ratio: '16:9',
+        loadingText: 'Loading...',
+        defaultRatio: '16:9',
         callback: null, // ToDO execute callback if given
-        container_class: 'lazyYT-container'
+        containerClass: 'lazyYT-container'
       };
       var settings = $.extend(defaultSettings, newSettings);
       
       return this.each(function () {
-          var $el = $(this).addClass(settings.container_class);
+          var $el = $(this).addClass(settings.containerClass);
           setUp($el, settings);
       });
     };

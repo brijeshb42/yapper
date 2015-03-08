@@ -10,7 +10,7 @@
     {{- form.hidden_tag() -}}
     {{- render_field(form.title) -}}
     {{- render_field(form.description, class='post-desc') -}}
-    {{- render_field(form.body, class='post-content') -}}
+    {{- render_field(form.body, class='post-content', id="markdown-editor") -}}
     {{- form.submit(class='btn') -}}
     </form>
 {%- endblock %}

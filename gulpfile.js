@@ -63,8 +63,9 @@ gulp.task('copyfiles-js', function() {
 
 
 gulp.task('bower', function (){
-    return gulp.src(mainBowerFiles(), {base: './bower_components/'})
-        .pipe(gulp.dest('./templates/assets/vendor/'));
+    return gulp.src(mainBowerFiles({debugging: true}), {base: './bower_components/'})
+        .pipe(gulp.dest('./templates/assets/vendor/'))
+        .pipe(gulp.dest(dest+'vendor/'));
 });
 
 
