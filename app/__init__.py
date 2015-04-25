@@ -9,6 +9,7 @@ from flask.ext.login import LoginManager
 from werkzeug.contrib.fixers import ProxyFix
 
 from config import config
+from vomitter import get_file_vomitter
 
 db = SQLAlchemy()
 # csrf = CsrfProtect()
@@ -16,6 +17,7 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'user.login'
 login_manager.login_message_category = 'info'
+logger = get_file_vomitter("app", logging.DEBUG)
 
 
 def create_app(config_name):

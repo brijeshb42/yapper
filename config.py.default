@@ -1,5 +1,9 @@
 import os
+
+from huey import RedisHuey
 basedir = os.path.abspath(os.path.dirname(__file__))
+
+# queue = RedisHuey("indexer", host="localhost", port=6379)
 
 
 class Config:
@@ -15,6 +19,11 @@ class Config:
     POSTS_PER_PAGE = 10
     GA_TRACKING_ID = None
     DOMAINS = ['domain1.com', 'domain2.com']
+    THEME = 'default'
+    MAIL_HOST = 'smtp.example.com'
+    MAIL_PORT = 587
+    MAIL_USERNAME = 'username@example.com'
+    MAIL_PASSWORD = 'pass1-abcd'
 
     @staticmethod
     def init_app(app):
@@ -41,7 +50,7 @@ class ProdConfig(Config):
     TESTING = False
     WTF_CSRF_ENABLED = True
     CSRF_ENABLED = True
-    GA_TRACKING_ID = 'UA-12345678-1'
+    GA_TRACKING_ID = 'UA-12344321-1'
     SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-prod.db')
 

@@ -1,6 +1,4 @@
-"""
-(c) 2014 by Brijesh Bittu
-"""
+"""Manger script."""
 import os
 from app import create_app, db
 from app.user.models import Role, User
@@ -29,8 +27,10 @@ manager.add_command('db', MigrateCommand)
 def test():
     """Run the unit tests."""
     import unittest
+    os.environ["FLASK_CONFIG"] = "test"
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
+    del os.environ["FLASK_CONFIG"]
 
 
 @manager.command

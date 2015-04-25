@@ -53,7 +53,7 @@ class LoginTestCase(unittest.TestCase):
 
     def test_add_post(self):
         self.login('test@mail.com', 'testpass')
-        rv = self.client.post('/blog/add', data=dict(
+        rv = self.client.post('/blog/new', data=dict(
             title='Title',
             description='Desc',
             body='## hello'

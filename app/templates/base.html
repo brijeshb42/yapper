@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{%- block title %}{%- endblock %} | {{- config.APP_NAME -}}</title>
+    <title>{%- block title %}{%- endblock %} - {{- config.APP_NAME -}}</title>
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {%- block meta %}
@@ -36,11 +36,11 @@
       {% if messages %}
         <div class="flashes">
         {% for category, message in messages %}
-            <div class="message {{ category }}"><p>{{ message }}</p></div>
+            <div class="message {{- category -}}"><p>{{ message }}</p></div>
         {% endfor %}
         </div>
       {% endif %}
-    {%- endwith %}
+    {% endwith -%}
     
     <div class="unit two-thirds">{%- block content %}{%- endblock %}</div>
     {%- block sidebar %}{%- endblock %}

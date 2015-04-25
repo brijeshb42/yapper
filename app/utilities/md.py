@@ -4,7 +4,7 @@ from markdown import markdown
 from pyembed.markdown import PyEmbedMarkdown
 import bleach
 
-from extensions import LazyYoutubeExtension
+from .extensions import LazyYoutubeExtension
 
 from config import Config
 
