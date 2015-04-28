@@ -14,12 +14,9 @@
     <!-- build:cssv /static/css/vendor.css -->
     <link rel="stylesheet" href="bower_components/normalize.css/normalize.css"/>
     <link rel="stylesheet" href="bower_components/gridism/gridism.css" />
+    <link rel="stylesheet" type="text/css" href="bower_components/github-markdown-css/github-markdown.css">
     <!-- endbuild -->
     <!-- build:css /static/css/style.css -->
-    <link rel="stylesheet" type="text/css" href="static/css/markdown.css">
-    <link rel="stylesheet" type="text/css" href="static/css/codehilite.css">
-    <link rel="stylesheet" type="text/css" href="static/css/colorful.css">
-    <link rel="stylesheet" type="text/css" href="static/css/lazyyt.css">
     <link rel="stylesheet" type="text/css" href="static/css/style.min.css">
     <!-- endbuild -->
     {%-endblock -%}
@@ -30,34 +27,34 @@
         <nav class="grid wrap">
             <ul>
             <li><a href="{{ url_for('blog.index') }}">Posts</a></li>
-            {%- if current_user.is_authenticated()-%}
+            {% if current_user.is_authenticated() %}
             <li><a href="#">{{ current_user.name }}</a></li>
             <li><a href="{{ url_for('blog.add') }}">Add Post</a></li>
             <li><a href="{{ url_for('user.logout') }}">Logout</a></li>
-            {%-else-%}
+            {%- else -%}
             <li><a href="{{ url_for('user.login') }}">Login</a></li>
             <li><a href="{{ url_for('user.signup') }}">Sign Up</a></li>
-            {%-endif -%}
+            {%- endif -%}
             </ul>
         </nav>
     </header>
     <section class="grid wrap content">
-    {%- with messages = get_flashed_messages(with_categories=true)-%}
-      {%-if messages-%}
+    {%- with messages = get_flashed_messages(with_categories=true) -%}
+      {%- if messages -%}
         <div class="flashes">
-        {%-for category, message in messages-%}
-            <div class="message {{- category -}}"><p>{{ message }}</p></div>
-        {%-endfor-%}
+        {%- for category, message in messages -%}
+            <div class="message {{ category }}"><p>{{ message }}</p></div>
+        {%- endfor -%}
         </div>
-      {%-endif-%}
-    {%-endwith -%}
+      {%- endif -%}
+    {%- endwith -%}
     
     <div class="unit two-thirds">{%- block content-%}{%- endblock-%}</div>
     {%- block sidebar-%}{%- endblock-%}
     </section>
     
     <footer>
-    {%- block footer-%}{%-endblock -%}
+    {%- block footer -%}{%- endblock -%}
     </footer>
     {%- block scripts-%}
     <!-- build:jsv /static/js/vendor.js -->

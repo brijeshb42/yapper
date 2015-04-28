@@ -1,3 +1,4 @@
 $(document).ready(function() {
-    $('.lazyYT').lazyYT();
+    var st = "jk";
+    var dt = 'jk';
 });

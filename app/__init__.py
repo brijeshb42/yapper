@@ -22,7 +22,12 @@ logger = get_file_vomitter("app", logging.DEBUG)
 
 def create_app(config_name):
     """App creation factory based on the FLASK_CONFIG env var."""
-    app = Flask(__name__)
+    app = Flask(
+        __name__,
+        template_folder="../templates/",
+        static_url_path="/static",
+        static_folder="../templates/static/"
+    )
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 

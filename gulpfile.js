@@ -56,6 +56,7 @@ gulp.task('styles', function () {
             errLogToConsole: true,
             sourceComments : 'normal'
         }))
+        .pipe(gulp.dest(dest.css))
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(src.css))
         .pipe(livereload());
@@ -79,7 +80,7 @@ gulp.task('styles', function () {
 
 /* scripts */
 gulp.task('scripts', function(){
-    return gulp.src(src.js+"*.js")
+    return gulp.src(src.js+"*[^min\.].js")
         .pipe(plumber(function () {
             console.log('There was an issue processing JS.');
             this.emit('end');
@@ -87,6 +88,7 @@ gulp.task('scripts', function(){
         .pipe(jshint('.jshintrc'))
         .pipe(jshint.reporter('default'))
         .pipe(concat('script.js'))
+        .pipe(gulp.dest(dest.js))
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(src.js))
         .pipe(livereload());
@@ -124,8 +126,7 @@ gulp.task('usemin', ['styles', 'scripts', 'copyfiles'], function(){
             js: [jshint('.jshintrc')],
             jsv: ['concat']
         }))
-        .pipe(gulp.dest(dest.root))
-        .pipe(livereload());
+        .pipe(gulp.dest(dest.root));
 });
 
 
@@ -154,7 +155,7 @@ gulp.task('init', function(){
 });
 
 
-gulp.task('watch', function() { 
+gulp.task('watch', ['usemin'], function() { 
     // Watch image files
     //gulp.watch('src/images/**//*', ['images']);
  
@@ -165,7 +166,7 @@ gulp.task('watch', function() {
     console.info('Livereload on PORT '+livereload.options.port);
 
     // Watch .scss files
-    gulp.watch(src.sass+'*.scss', ['styles']);
+    gulp.watch(src.scss+'*.scss', ['styles']);
  
     // Watch .js files
     gulp.watch(src.js+'*.js', ['scripts']);
@@ -176,7 +177,7 @@ gulp.task('watch', function() {
 
     // Watch template changes
     //gulp.watch(htmlSrc + 'base1.html', ['usemin']);
-    //gulp.watch(htmlDest + '**/*.html', livereload.reload);
+    gulp.watch(src.html, ['usemin']);
 });
 
 
@@ -184,9 +185,7 @@ gulp.task('dist', ['clean'], function() {
     gulp.start('styles-dist', 'copyfiles-css', 'copyfiles-js', 'scripts-dist', 'usemin');
 });
 
-gulp.task('default', ['clean'], function() {
-    gulp.start('styles', 'copyfiles-css', 'copyfiles-js', 'scripts', 'usemin');
-});
+gulp.task('default', ['watch']);
 
 gulp.task('serve',['default'], function(){
     gulp.start('flask', 'watch');

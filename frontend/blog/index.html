@@ -9,12 +9,6 @@
 {%- endif %}
 {%- endblock %}
 {%- block title %}{{title}}{%- endblock %}
-{%- block styles %}
-    {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/markdown.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/colorful.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/lazyyt.css') }}">
-{%- endblock %}
 {% block content %}
     {% if posts|length > 0 %}
         {% for post in posts %}
