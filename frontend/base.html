@@ -1,0 +1,80 @@
+{%- from '_helpers.html' import ga_tracking -%}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{%- block title-%}{%- endblock-%}{{- ' - ' + config.APP_NAME -}}</title>
+    {%- block meta -%}
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Description">
+    {%- endblock -%}
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    {%- block styles-%}
+    <!-- build:cssv /static/css/vendor.css -->
+    <link rel="stylesheet" href="bower_components/normalize.css/normalize.css"/>
+    <link rel="stylesheet" href="bower_components/gridism/gridism.css" />
+    <!-- endbuild -->
+    <!-- build:css /static/css/style.css -->
+    <link rel="stylesheet" type="text/css" href="static/css/markdown.css">
+    <link rel="stylesheet" type="text/css" href="static/css/codehilite.css">
+    <link rel="stylesheet" type="text/css" href="static/css/colorful.css">
+    <link rel="stylesheet" type="text/css" href="static/css/lazyyt.css">
+    <link rel="stylesheet" type="text/css" href="static/css/style.min.css">
+    <!-- endbuild -->
+    {%-endblock -%}
+</head>
+<body>
+    <header class="header">
+        <h1><a href="/">{{- config.APP_NAME -}}</a></h1>
+        <nav class="grid wrap">
+            <ul>
+            <li><a href="{{ url_for('blog.index') }}">Posts</a></li>
+            {%- if current_user.is_authenticated()-%}
+            <li><a href="#">{{ current_user.name }}</a></li>
+            <li><a href="{{ url_for('blog.add') }}">Add Post</a></li>
+            <li><a href="{{ url_for('user.logout') }}">Logout</a></li>
+            {%-else-%}
+            <li><a href="{{ url_for('user.login') }}">Login</a></li>
+            <li><a href="{{ url_for('user.signup') }}">Sign Up</a></li>
+            {%-endif -%}
+            </ul>
+        </nav>
+    </header>
+    <section class="grid wrap content">
+    {%- with messages = get_flashed_messages(with_categories=true)-%}
+      {%-if messages-%}
+        <div class="flashes">
+        {%-for category, message in messages-%}
+            <div class="message {{- category -}}"><p>{{ message }}</p></div>
+        {%-endfor-%}
+        </div>
+      {%-endif-%}
+    {%-endwith -%}
+    
+    <div class="unit two-thirds">{%- block content-%}{%- endblock-%}</div>
+    {%- block sidebar-%}{%- endblock-%}
+    </section>
+    
+    <footer>
+    {%- block footer-%}{%-endblock -%}
+    </footer>
+    {%- block scripts-%}
+    <!-- build:jsv /static/js/vendor.js -->
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="static/js/lazyyt.v.js"></script>
+    <!-- endbuild -->
+    <!-- build:js /static/js/script.js -->
+    <script src="static/js/script.min.js"></script>
+    <!-- endbuild -->
+    {%- endblock-%}
+    {%- if config.DEBUG-%}
+    <!-- livereload script -->
+    <script>document.write('<script src="http://'
+     + (location.host || 'localhost').split(':')[0]
+     + ':35729/livereload.js?snipver=1" type="text/javascript"><\/script>')
+    </script>
+    {%-endif -%}
+    {{- ga_tracking() -}}
+</body>
+</html>

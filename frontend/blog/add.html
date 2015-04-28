@@ -1,10 +1,6 @@
 {%- extends 'base.html' -%}
 {%- from '_helpers.html' import render_field -%}
 {%- block title %}{{title}}{% endblock -%}
-{% block styles %}
-    {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/colorful.css') }}">
-{% endblock %}
 {%- block content %}
     <form id="post-form" action="" method="post">
     {{- form.hidden_tag() -}}

@@ -34,7 +34,3 @@
         <p>No post</p>
     {% endif %}
 {% endblock %}
-{%- block scripts %}
-    {{- super() -}}
-    <script src="{{- url_for('static', filename='js/lazyyt.v.js') -}}"></script>
-{% endblock -%}

@@ -27,16 +27,26 @@ var banner = ['/**',
   ' */',
   ''].join('\n');
 
+var src = {
+    root: './frontend/',
+    html: './frontend/**//*.html',
+    scss: './frontend/static/sass/',
+    js: './frontend/static/js/',
+    css: './frontend/static/css/',
+    img: './frontend/static/img/'
+};
 
-var src = './templates/assets/',
-    dest = './app/static/',
-    htmlSrc = './templates/',
-    htmlDest = './app/templates/';
+var dest = {
+    root: './templates/',
+    static: './templates/static/',
+    css: './templates/static/css/',
+    js: './templates/static/js/'
+};
 
 
 /* styles */
 gulp.task('styles', function () {
-    return gulp.src(src+'css/style.scss')
+    return gulp.src(src.scss+'style.scss')
         .pipe(plumber(function (e) {
             console.log('There was an issue compiling Sass');
             console.log(e);
@@ -46,30 +56,13 @@ gulp.task('styles', function () {
             errLogToConsole: true,
             sourceComments : 'normal'
         }))
-        .pipe(gulp.dest(dest+'css'))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(src.css))
         .pipe(livereload());
 });
 
-gulp.task('copyfiles-css', function() {
-    return gulp.src(src+'css/*.css')
-        .pipe(gulp.dest(dest+'/css'));
-});
 
-
-gulp.task('copyfiles-js', function() {
-    return gulp.src(src+'js/*.v.js')
-        .pipe(gulp.dest(dest+'/js'));
-});
-
-
-gulp.task('bower', function (){
-    return gulp.src(mainBowerFiles({debugging: true}), {base: './bower_components/'})
-        .pipe(gulp.dest('./templates/assets/vendor/'))
-        .pipe(gulp.dest(dest+'vendor/'));
-});
-
-
-gulp.task('styles-dist', function (){
+/*gulp.task('styles-dist', function (){
     return gulp.src(src+'css/style.scss')
         .pipe(plumber(function () {
             console.log('There was an issue compiling Sass');
@@ -81,25 +74,26 @@ gulp.task('styles-dist', function (){
         .pipe(minifyCss())
         .pipe(header(banner, { pkg : pkg } ))
         .pipe(gulp.dest(dest+'css'));
-});
+});*/
 
 
 /* scripts */
 gulp.task('scripts', function(){
-    return gulp.src(src+'js/**//*.js')
+    return gulp.src(src.js+"*.js")
         .pipe(plumber(function () {
             console.log('There was an issue processing JS.');
             this.emit('end');
         }))
         .pipe(jshint('.jshintrc'))
         .pipe(jshint.reporter('default'))
-        .pipe(concat('all.js'))
-        .pipe(gulp.dest(dest+'js'))
+        .pipe(concat('script.js'))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(src.js))
         .pipe(livereload());
 });
 
-gulp.task('scripts-dist', function(){
-    return gulp.src(src+'js/**/*.js')
+/*gulp.task('scripts-dist', function(){
+    return gulp.src(src.js+'*.js')
         .pipe(plumber(function () {
             console.log('There was an issue processing JS.');
             this.emit('end');
@@ -112,26 +106,35 @@ gulp.task('scripts-dist', function(){
         .pipe(uglify({mangle: true}))
         .pipe(header(banner, { pkg : pkg } ))
         .pipe(gulp.dest(dest+'js'));
+});*/
+
+
+gulp.task('copyfiles', function() {
+    return gulp.src(src.img)
+        .pipe(gulp.dest(dest.static));
 });
 
 
-gulp.task('usemin', ['bower'], function(){
-    return gulp.src(['./templates/base1.html'])
+gulp.task('usemin', ['styles', 'scripts', 'copyfiles'], function(){
+    return gulp.src(src.html)
         .pipe(usemin({
-            css: [minifyCss(), 'concat'],
+            cssv: ['concat'],
+            css: ['concat'],
             //html: [minifyHtml({empty: true})],
-            js: [uglify(), 'concat']
+            js: [jshint('.jshintrc')],
+            jsv: ['concat']
         }))
-        .pipe(gulp.dest('./app/templates/'));
+        .pipe(gulp.dest(dest.root))
+        .pipe(livereload());
 });
 
 
 /* clean */
 gulp.task('clean', function(cb){
-    return del([dest, 'templates/assets/vendor/'], cb);
-});
-gulp.task('clean-dist', function(cb){
-    return del([dest+'css/**/*.min.css', dest+'js/**/*.min.js'], cb);
+    return del([dest.root, src.css+"*.min.css", src.js+"*.min.js"], function (err, paths) {
+        console.log('Deleted files/folders:\n', paths.join('\n'));
+        cb();
+    });
 });
 
 
@@ -162,18 +165,18 @@ gulp.task('watch', function() {
     console.info('Livereload on PORT '+livereload.options.port);
 
     // Watch .scss files
-    gulp.watch(src+'css/**/*.scss', ['styles']);
+    gulp.watch(src.sass+'*.scss', ['styles']);
  
     // Watch .js files
-    gulp.watch(src+'js/**/*.js', ['scripts']);
+    gulp.watch(src.js+'*.js', ['scripts']);
 
     // Watch static files
-    gulp.watch(src+'css/**/*.css', ['copyfiles-css']);
-    gulp.watch(src+'css/**/*.v.js', ['copyfiles-js']);
+    //gulp.watch(src+'css/**/*.css', ['copyfiles-css']);
+    //gulp.watch(src+'css/**/*.v.js', ['copyfiles-js']);
 
     // Watch template changes
-    gulp.watch(htmlSrc + 'base1.html', ['usemin']);
-    gulp.watch(htmlDest + '**/*.html', livereload.reload);
+    //gulp.watch(htmlSrc + 'base1.html', ['usemin']);
+    //gulp.watch(htmlDest + '**/*.html', livereload.reload);
 });
 
 

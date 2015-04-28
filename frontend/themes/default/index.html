@@ -1,0 +1,36 @@
+{%- from '_helpers.html' import render_pagination -%}
+{% extends 'base.html' %}
+{%- block meta %}
+{%- if posts|length == 1 %}
+<meta name="description" content="{{- posts[0].description -}}">
+<meta name="author" content="{{- posts[0].author.name -}}">
+{%- else %}
+<meta name="description" content="Page of posts">
+{%- endif %}
+{%- endblock %}
+{%- block title %}{{title}}{%- endblock %}
+{%- block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/markdown.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/colorful.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lazyyt.css') }}">
+{%- endblock %}
+{% block content %}
+    {% if posts|length > 0 %}
+        {% for post in posts %}
+            <div class="post">
+            <h2><a href="{{ url_for('blog.get_post', pid=post.id) }}">{{ post.title }}</a></h2>
+            <p>Created at: {{ post.created_at }} by {{ post.author.name }}</p>
+            <div class="markdown-body">{{ post.html|safe }}</div>
+            <form action="{{ url_for('blog.delete', pid=post.id) }}" method="POST">
+                <input type="hidden" name="_method" value="DELETE" />
+                <input type="submit" value="Delete"/>
+            </form>
+            <a href="{{- url_for('blog.edit_post', pid=post.id) -}}">Edit</a>
+            </div>
+        {% endfor %}
+        {{- render_pagination(pagination) -}}
+    {% else %}
+        <p>No post</p>
+    {% endif %}
+{% endblock %}

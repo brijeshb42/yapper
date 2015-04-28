@@ -2,11 +2,11 @@ config.py
 *.db
 bower_components/
 migrations/
-app/static/
-app/templates/
-app/templates/base1.html
-templates/assets/vendor/
 run/
+assets/
+templates/
+*.min.css
+*.min.js
 
 #### joe made this: https://goel.io/joe
 
