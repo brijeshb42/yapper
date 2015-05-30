@@ -1,7 +1,7 @@
 import unittest
 
-from app import db
-from app.user.models import User, Role, Permission, AnonymousUser
+from backend import db
+from backend.user.models import User, Role, Permission, AnonymousUser
 
 
 class UserModelTestCase(unittest.TestCase):

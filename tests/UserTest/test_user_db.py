@@ -1,6 +1,6 @@
 import unittest
-from app import create_app, db
-from app.user.models import User, Role
+from backend import create_app, db
+from backend.user.models import User, Role
 
 
 class TestUserAddToDb(unittest.TestCase):

@@ -1,7 +1,7 @@
 import unittest
-from app import db, create_app
-from app.blog.models import Post, Tag, Category
-from app.user.models import User
+from backend import db, create_app
+from backend.blog.models import Post, Tag, Category
+from backend.user.models import User
 
 
 class TagAddTestCase(unittest.TestCase):

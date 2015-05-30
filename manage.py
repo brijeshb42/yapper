@@ -1,8 +1,8 @@
 """Manger script."""
 import os
-from app import create_app, db
-from app.user.models import Role, User
-from app.blog.models import Tag, Category, Post
+from backend import create_app, db
+from backend.user.models import Role, User
+from backend.blog.models import Tag, Category, Post
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 

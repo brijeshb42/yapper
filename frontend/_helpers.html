@@ -2,13 +2,13 @@
     <div class="form-field">
         {{- field.label(class='field-label') -}}
         <div>{{ field(**kwargs)|safe }}</div>
-        {%- if field.errors %}
+        {%- if field.errors -%}
         <ul class="form-errors">
-            {%- for error in field.errors %}
+            {%- for error in field.errors -%}
             <li>{{ error }}</li>
-            {%- endfor %}
+            {%- endfor -%}
         </ul>
-        {%- endif %}
+        {%- endif -%}
     </div>
 {% endmacro %}
 

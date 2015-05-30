@@ -1,8 +1,8 @@
 import unittest
 from flask import current_app
-from app import create_app, db
-from app.user.models import Role, User
-from app.blog.models import Post
+from backend import create_app, db
+from backend.user.models import Role, User
+from backend.blog.models import Post
 
 
 class UserFormTestCase(unittest.TestCase):

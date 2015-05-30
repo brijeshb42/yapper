@@ -68,9 +68,9 @@ def get_mail_handler(name="app", level=DEF_LEVEL):
     """Mail handler."""
     handler = GmailSMTPHandler(
             (Config.MAIL_HOST, Config.MAIL_PORT),
-            "bugs@scroll.in",
+            Config.MAIL_FROM,
             Config.MAIL_TO,
-            "Buzz Server Error.",
+            "%s Server Error." % Config.APP_NAME,
             (Config.MAIL_FROM, Config.MAIL_PASSWORD))
     handler.setLevel(level)
     handler.setFormatter(get_mail_formatter())
@@ -82,3 +82,5 @@ def get_mail_vomitter(name="app", level=DEF_LEVEL):
     logger = get_file_vomitter(name, level)
     logger.addHandler(get_mail_handler(name, level))
     return logger
+
+PROD_LOGGER = get_mail_vomitter(name="Mailer", level=logging.ERROR)

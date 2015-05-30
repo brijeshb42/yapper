@@ -1,12 +1,12 @@
 from datetime import datetime
 
 from flask import current_app
-from app import db
+from backend import db
 from werkzeug.security import generate_password_hash, \
     check_password_hash
 from flask.ext.login import UserMixin, AnonymousUserMixin
 # from config import Config
-from app import login_manager
+from backend import login_manager
 
 
 class Permission:

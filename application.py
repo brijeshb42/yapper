@@ -1,7 +1,7 @@
 """Create application instance using application factory."""
 import os
 
-import app as application
+import backend as application
 
 env = os.getenv('FLASK_CONFIG')
 

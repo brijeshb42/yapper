@@ -3,13 +3,13 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from flask import current_app, redirect, url_for, render_template, \
     flash, request, abort, jsonify
-from app import db
+from backend import db
 from flask.ext.login import login_required, current_user
 from . import blog_blueprint
 from .forms import PostForm
 from .models import Post, Tag
 from ..user.models import Permission
-from app.decorators import permission_required
+from backend.decorators import permission_required
 
 
 @blog_blueprint.route('/page/<int:page>')

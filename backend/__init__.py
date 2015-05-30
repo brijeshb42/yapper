@@ -9,7 +9,7 @@ from flask.ext.login import LoginManager
 from werkzeug.contrib.fixers import ProxyFix
 
 from config import config
-from vomitter import get_file_vomitter
+from vomitter import get_file_vomitter, get_mail_handler, get_file_handler
 
 db = SQLAlchemy()
 # csrf = CsrfProtect()
@@ -36,13 +36,6 @@ def create_app(config_name):
     login_manager.init_app(app)
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    @app.before_first_request
-    def setup_logging():
-        if not app.debug:
-            # In production mode, add log handler to sys.stderr.
-            app.logger.addHandler(logging.StreamHandler())
-            app.logger.setLevel(logging.INFO)
-
     from .main import main_blueprint
     from .user import user_blueprint
     from .blog import blog_blueprint
@@ -56,5 +49,11 @@ def create_app(config_name):
         blog_blueprint,
         url_prefix=config[config_name].BLOG_PREFIX
     )
+
+    if not app.debug:
+        app.logger.addHandler(
+            get_mail_handler(name=config['default'].APP_NAME, level=logging.ERROR))
+    else:
+        app.logger.addHandler(get_file_handler())
 
     return app
