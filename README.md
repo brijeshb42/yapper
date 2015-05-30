@@ -13,7 +13,8 @@
     * ```python manage.py db init```
     * ```python manage.py db migrate```
     * ```python manage.py db update```
-* Run local server ```gulp serve```.
+* Run gulp ```gulp clean && gulp```.
+* Start dev server ```python manage.py runserver```.
 
 ## Issues
 * Report issues or suggestions [here](https://github.com/brijeshb42/yapper/issues/new).
