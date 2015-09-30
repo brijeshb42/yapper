@@ -8,6 +8,7 @@
 * Create a virtualenv.
 * Activate virtualenv.
 * Do ```pip install -r requirements.txt```.
+* Run `bash -x init.sh`.
 * Perform unittests ```python manage.py test```.
 * Create DB
     * ```python manage.py db init```
