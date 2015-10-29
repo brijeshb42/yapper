@@ -52,7 +52,8 @@ def create_app(config_name):
 
     if not app.debug:
         app.logger.addHandler(
-            get_mail_handler(name=config['default'].APP_NAME, level=logging.ERROR))
+            get_mail_handler(name=config['default'].APP_NAME,
+                             level=logging.ERROR))
     else:
         app.logger.addHandler(get_file_handler())
 

@@ -1,5 +1,5 @@
-from backend import db
-from backend.utilities.md import create_post_from_md
+from yapper import db
+from yapper.utilities.md import create_post_from_md
 
 TYPE_POST = 1
 TYPE_PAGE = 2
@@ -30,6 +30,7 @@ categories_posts = db.Table(
 
 class Tag(BaseModel):
     __tablename__ = 'tags'
+    id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(100), unique=True, index=True)
 
     def __repr__(self):
@@ -38,6 +39,7 @@ class Tag(BaseModel):
 
 class Category(BaseModel):
     __tablename__ = 'categories'
+    id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(100), unique=True, index=True)
 
     def __repr__(self):

@@ -3,21 +3,21 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from flask import current_app, redirect, url_for, render_template, \
     flash, request, abort, jsonify
-from backend import db
+from yapper import db
 from flask.ext.login import login_required, current_user
 from . import blog_blueprint
 from .forms import PostForm
 from .models import Post, Tag
 from ..user.models import Permission
-from backend.decorators import permission_required
+from yapper.decorators import permission_required
 
 
 @blog_blueprint.route('/page/<int:page>')
 @blog_blueprint.route('/')
 def index(page=1):
-    """Show lst of latest blog posts."""
+    """Show list of latest blog posts."""
     pagination = Post.query.order_by(
-            Post.created_at.desc()
+        Post.created_at.desc()
     ).paginate(
         page=page,
         per_page=current_app.config['POSTS_PER_PAGE'],
@@ -51,6 +51,7 @@ def get_post(pid=None, slug=None):
 def add():
     """Create a new blog post."""
     form = PostForm()
+    status = 200
     if form.validate_on_submit():
         post = Post(
             title=form.title.data,
@@ -62,7 +63,12 @@ def add():
         db.session.commit()
         flash(u'Post added')
         return redirect(url_for('.index'))
-    return render_template('blog/add.html', form=form, title='Create New Post')
+    else:
+        status = 406
+    return render_template(
+        'blog/add.html',
+        form=form,
+        title='Create New Post'), status
 
 
 @blog_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
@@ -74,6 +80,7 @@ def edit_post(pid=None):
     if not (current_user.is_admin() or current_user.id == post.author.id):
         abort(403)
     form = PostForm()
+    status = 200
     if form.validate_on_submit():
         post.title = form.title.data
         post.description = form.description.data
@@ -82,6 +89,8 @@ def edit_post(pid=None):
         db.session.commit()
         flash(u'Post Updated', 'success')
         return redirect(url_for('.get_post', pid=post.id))
+    else:
+        status = 406
     form.title.data = post.title
     form.description.data = post.description
     form.body.data = post.body
@@ -89,7 +98,7 @@ def edit_post(pid=None):
         'blog/add.html',
         form=form,
         title='Edit Post - '+post.title
-    )
+    ), status
 
 
 @blog_blueprint.route('/<int:pid>', methods=['DELETE', 'POST'])
@@ -129,12 +138,11 @@ def add_tag():
                 'type': 'error',
                 'message': 'Invalid paramater.'
             }), 400
-        taglist = taglist.split(',')
+        taglist = taglist.lower().split(',')
         tags = []
         for tag in taglist:
-            tag = tag.lower()
             try:
-                ctag = Tag.query.filter_by(name=tag).one()
+                Tag.query.filter_by(name=tag).one()
             except NoResultFound:
                 tags.append(Tag(name=tag))
             except MultipleResultsFound:

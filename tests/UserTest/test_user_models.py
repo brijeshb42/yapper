@@ -1,12 +1,13 @@
 import unittest
 
-from backend import db
-from backend.user.models import User, Role, Permission, AnonymousUser
+from yapper import db
+from yapper.user.models import User, Role, Permission, AnonymousUser
 
 
 class UserModelTestCase(unittest.TestCase):
     def setUp(self):
         db.create_all()
+        Role.insert_roles()
 
     def tearDown(self):
         db.session.remove()
@@ -32,7 +33,6 @@ class UserModelTestCase(unittest.TestCase):
         self.assertTrue(u.password_hash != u2.password_hash)
 
     def test_roles_and_permissions(self):
-        Role.insert_roles()
         u = User(email='brijeshb2@gmail.com', password='adt')
         self.assertTrue(u.can(Permission.WRITE_POSTS))
 

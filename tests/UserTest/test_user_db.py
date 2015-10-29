@@ -1,6 +1,6 @@
 import unittest
-from backend import create_app, db
-from backend.user.models import User, Role
+from yapper import create_app, db
+from yapper.user.models import User, Role
 
 
 class TestUserAddToDb(unittest.TestCase):

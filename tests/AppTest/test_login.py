@@ -1,8 +1,7 @@
 import unittest
-from flask import current_app
-from backend import create_app, db
-from backend.user.models import Role, User
-from backend.blog.models import Post
+from yapper import create_app, db
+from yapper.user.models import Role, User
+from yapper.blog.models import Post
 
 
 class LoginTestCase(unittest.TestCase):
@@ -47,7 +46,7 @@ class LoginTestCase(unittest.TestCase):
         rv = self.login('test@mail.com', 'testpass')
         assert 'Test User' in rv.data
         rv = self.logout()
-        assert 'logged out' in rv.data
+        assert 'You have been logged out' in rv.data
         rv = self.login('tets@gmail.com', 'po')
         assert 'Invalid combination' in rv.data
 

@@ -1,23 +1,21 @@
 import unittest
-from flask import current_app
-from backend import create_app, db
-from backend.user.models import Role, User
-from backend.blog.models import Post
+
+from yapper import create_app, db
+from yapper.user.models import Role, User
 
 
 class UserFormTestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app('test')
         self.app_context = self.app.app_context()
-        self.app.config['CSRF_ENABLED'] = False
         self.client = self.app.test_client()
-        db.create_all()
         self.app_context.push()
+        db.create_all()
         Role.insert_roles()
         u = User(
             email=self.app.config['FLASKY_ADMIN'],
             password='testpass',
-            name='Admin',
+            name='Admin'
         )
         u2 = User(
             email='test@example.com',
@@ -71,4 +69,3 @@ class UserFormTestCase(unittest.TestCase):
         rv = self.login('test@example.com', 'testpass')
         rv = self.client.delete('/blog/1', follow_redirects=True)
         assert rv.status_code == 403
-

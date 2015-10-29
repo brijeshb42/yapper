@@ -2,8 +2,8 @@ from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_required, login_user, logout_user,\
     current_user
 
-from backend import db
-from backend.decorators import admin_required
+from yapper import db
+from yapper.decorators import admin_required
 from . import user_blueprint as ubp
 from .forms import LoginForm, RegisterForm
 from .models import User

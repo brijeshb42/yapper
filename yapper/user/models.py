@@ -1,12 +1,13 @@
 from datetime import datetime
 
 from flask import current_app
-from backend import db
 from werkzeug.security import generate_password_hash, \
     check_password_hash
 from flask.ext.login import UserMixin, AnonymousUserMixin
+
+from yapper import db
 # from config import Config
-from backend import login_manager
+from yapper import login_manager
 
 
 class Permission:
@@ -34,6 +35,7 @@ class BaseModel(db.Model):
 
 class Role(BaseModel):
     __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
@@ -49,9 +51,10 @@ class Role(BaseModel):
             'Admin': Permission.admin()
         }
         for r in roles:
-            role = Role.query.filter_by(name=r).first()
+            nm = r.lower()
+            role = Role.query.filter_by(name=nm).first()
             if role is None:
-                role = Role(name=r)
+                role = Role(name=nm)
             role.permissions = roles[r][0]
             role.default = roles[r][1]
             db.session.add(role)
@@ -72,7 +75,7 @@ class User(UserMixin, BaseModel):
         if self.role is None:
             if self.email == current_app.config['FLASKY_ADMIN']:
                 self.role = Role.query.filter_by(
-                    permissions=Permission.ADMIN
+                    name="admin"
                 ).first()
                 self.status = True
             if self.role is None:
@@ -114,7 +117,7 @@ class AnonymousUser(AnonymousUserMixin):
         return False
 
     def is_administrator(self):
-        return is_admin()
+        return self.is_admin()
 
     def is_confirmed(self):
         return False

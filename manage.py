@@ -1,8 +1,8 @@
 """Manger script."""
 import os
-from backend import create_app, db
-from backend.user.models import Role, User
-from backend.blog.models import Tag, Category, Post
+from yapper import create_app, db
+from yapper.user.models import Role, User
+from yapper.blog.models import Tag, Category, Post
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -36,7 +36,7 @@ def test():
 @manager.command
 def init():
     """Enter initial data"""
-    db.create_all()
+    # db.create_all()
     Role.insert_roles()
     c = Category(name='default')
     db.session.add(c)

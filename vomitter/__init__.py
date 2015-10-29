@@ -83,4 +83,5 @@ def get_mail_vomitter(name="app", level=DEF_LEVEL):
     logger.addHandler(get_mail_handler(name, level))
     return logger
 
+LOGGER = get_console_vomitter(name="Yapper", level=logging.DEBUG)
 PROD_LOGGER = get_mail_vomitter(name="Mailer", level=logging.ERROR)

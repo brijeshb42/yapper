@@ -30,7 +30,7 @@ class RegisterForm(Form):
         super(RegisterForm, self).__init__(**kwargs)
         self.role.choices = [(r.id, r.name)
                              for r in Role.query.with_entities(
-                                Role.id, Role.name).all()]
+                             Role.id, Role.name).all()]
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():

@@ -2,7 +2,7 @@ from urlparse import urlparse
 
 from markdown import markdown
 from pyembed.markdown import PyEmbedMarkdown
-import bleach
+# import bleach
 
 from .extensions import LazyYoutubeExtension
 
@@ -17,10 +17,10 @@ def externallify_url(attrs, new=False):
     from the domains in Config.DOMAINS
     """
     p = urlparse(attrs['href'])
-    if p.netloc not in Config.DOMAINS:
+    if p.netloc.lower() not in Config.DOMAINS:
         # attrs['rel'] = 'nofollow'
         attrs['target'] = '_blank'
-        attrs['class'] = 'external'
+        attrs['class'] = 'link-external'
     else:
         attrs.pop('target', None)
     return attrs
@@ -35,7 +35,7 @@ def dont_linkify_urls(attrs, new=False):
     """
     file_exts = ('.py', '.md', '.sh')
     txt = attrs['_text']
-    if txt.startswith(('http:', 'https:')):
+    if txt.startswith(('http://', 'https://')):
         return attrs
     if txt.endswith(file_exts):
         return None
@@ -44,19 +44,28 @@ def dont_linkify_urls(attrs, new=False):
 
 def create_post_from_md(body):
     """Parse markdown and linkify urls."""
-    allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
-                    'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
-                    'h2', 'h3', 'p', 'span']
-    return bleach.linkify(
-        markdown(
-            body,
-            output_format='html5',
-            extensions=[
-                'codehilite(linenums=True)',
-                PyEmbedMarkdown(),
-                LazyYoutubeExtension()
-            ]
-        ),
-        callbacks=[externallify_url, dont_linkify_urls],
-        skip_pre=True
+    # allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+    #                 'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
+    #                 'h2', 'h3', 'p', 'span']
+    return markdown(
+        body,
+        output_format='html5',
+        extensions=[
+            'codehilite(linenums=True)',
+            PyEmbedMarkdown(),
+            LazyYoutubeExtension()
+        ]
     )
+    # return bleach.linkify(
+    #     markdown(
+    #         body,
+    #         output_format='html5',
+    #         extensions=[
+    #             'codehilite(linenums=True)',
+    #             PyEmbedMarkdown(),
+    #             LazyYoutubeExtension()
+    #         ]
+    #     ),
+    #     callbacks=[externallify_url, dont_linkify_urls],
+    #     skip_pre=False
+    # )

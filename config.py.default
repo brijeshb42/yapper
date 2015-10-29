@@ -1,6 +1,6 @@
 import os
 
-from huey import RedisHuey
+# from huey import RedisHuey
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # queue = RedisHuey("indexer", host="localhost", port=6379)
@@ -20,12 +20,12 @@ class Config:
     GA_TRACKING_ID = None
     DOMAINS = ['domain1.com', 'domain2.com']
     THEME = 'default'
-    MAIL_HOST = 'smtp.example.com'
+    MAIL_HOST = 'smtp.mandrillapp.com'
     MAIL_PORT = 587
-    MAIL_TO = ['admins@example.com']
-    MAIL_FROM = 'user@example.com'
-    MAIL_USERNAME = 'username@example.com'
-    MAIL_PASSWORD = 'pass1-abcd'
+    MAIL_TO = ['bugs@gmail.com']
+    MAIL_FROM = 'admin@gmail.com'
+    MAIL_USERNAME = 'tech@gmail.com'
+    MAIL_PASSWORD = 'aaasa-JxxQ'
 
     @staticmethod
     def init_app(app):
@@ -34,15 +34,17 @@ class Config:
 
 class DevConfig(Config):
     DEBUG = True
+    SQLALCHEMY_ECHO = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-dev.db')
 
 
-class TestConfig(Config):
+class TestConfig(DevConfig):
     DEBUG = True
     TESTING = True
     WTF_CSRF_ENABLED = False
     CSRF_ENABLED = False
+    SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-test.db')
 
@@ -52,7 +54,7 @@ class ProdConfig(Config):
     TESTING = False
     WTF_CSRF_ENABLED = True
     CSRF_ENABLED = True
-    GA_TRACKING_ID = 'UA-12344321-1'
+    GA_TRACKING_ID = 'UA-95223174-1'
     SQLALCHEMY_DATABASE_URI = os.environ.get('PROD_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-prod.db')
 
