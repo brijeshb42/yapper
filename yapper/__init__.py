@@ -10,7 +10,7 @@ from flask.ext.login import LoginManager
 from werkzeug.contrib.fixers import ProxyFix
 
 from config import config
-from vomitter import get_mail_handler, get_file_handler
+from vomitter import get_mail_handler, get_file_handler, LOGGER as L
 
 db = SQLAlchemy()
 # csrf = CsrfProtect()
@@ -45,11 +45,19 @@ def create_app(config_name, set_utf=True):
     login_manager.init_app(app)
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
+    from yapper.blueprints.api import api
     from yapper.blueprints.main import main
     from yapper.blueprints.user import user
     from yapper.blueprints.blog import blog
 
+    # @app.before_request
+    # def before_request():
+    #     L.i(request.blueprint)
+    #     L.i(request.endpoint)
+    #     L.i(request.headers)
+
     app.register_blueprint(main, url_prefix='')
+    app.register_blueprint(api, url_prefix='/api/v1')
     app.register_blueprint(
         user,
         url_prefix=config[config_name].USER_PREFIX

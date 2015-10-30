@@ -13,8 +13,6 @@ from flask.ext.login import (
     current_user
 )
 
-from yapper import db
-
 from .decorators import admin_required
 from .forms import LoginForm, RegisterForm
 from .models import User

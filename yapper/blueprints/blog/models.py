@@ -29,6 +29,13 @@ class Tag(BaseModel):
     def __repr__(self):
         return '<Tag %s>' % self.name
 
+    def to_json(self):
+        json_data = {
+            'id': self.id,
+            'name': self.name,
+            'created_at': str(self.created_at)}
+        return json_data
+
 
 class Category(BaseModel):
     __tablename__ = 'categories'
@@ -37,6 +44,13 @@ class Category(BaseModel):
 
     def __repr__(self):
         return '<Category %s>' % self.name
+
+    def to_json(self):
+        json_data = {
+            'id': self.id,
+            'name': self.name,
+            'created_at': str(self.created_at)}
+        return json_data
 
 
 class Post(BaseModel):
@@ -56,6 +70,17 @@ class Post(BaseModel):
         'Category', secondary=categories_posts,
         backref=db.backref('posts', lazy='dynamic')
     )
+
+    def to_json(self):
+        json_data = {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'body': self.body,
+            'created_at': str(self.created_at),
+            'author': self.author.to_json()
+        }
+        return json_data
 
     @property
     def content(self):

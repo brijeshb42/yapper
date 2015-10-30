@@ -69,6 +69,7 @@ class UserFormTestCase(unittest.TestCase):
         assert '<h3>Hello World</h3>' in rv.data
         rv = self.logout()
         rv = self.login('test@example.com', 'testpass')
+        # with self.assertRaises(Forbidden):
         rv = self.client.delete(
             url_for('blog.delete', pid=1), follow_redirects=True)
         assert rv.status_code == 403

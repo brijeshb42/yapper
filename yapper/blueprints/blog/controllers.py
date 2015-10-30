@@ -14,7 +14,6 @@ from flask import (
 )
 from flask.ext.login import login_required, current_user
 
-from yapper import db
 from ..user.decorators import permission_required
 from .forms import PostForm
 from .models import Post, Tag
@@ -162,8 +161,7 @@ def add_tag():
             except MultipleResultsFound:
                 pass
         if len(tags) > 0:
-            db.session.add_all(tags)
-            db.session.commit()
+            Tag.save_all(tags)
         return jsonify({
             'type': 'success',
             'message': tags

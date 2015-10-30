@@ -37,7 +37,7 @@ class Role(BaseModel):
 
     @staticmethod
     def insert_roles():
-        L.i('Inserting default roles.')
+        # L.i('Inserting default roles.')
         roles = {
             'User': Permission.user(),
             'Admin': Permission.admin()
@@ -51,7 +51,7 @@ class Role(BaseModel):
             role.default = roles[r][1]
             db.session.add(role)
         db.session.commit()
-        L.i('Default roles %s added.', ', '.join(roles.keys()))
+        # L.i('Default roles %s added.', ', '.join(roles.keys()))
 
 
 class User(UserMixin, BaseModel):
@@ -62,6 +62,13 @@ class User(UserMixin, BaseModel):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     status = db.Column(db.Boolean, default=False)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+    def to_json(self):
+        json_data = {
+            'id': self.id,
+            'name': self.name
+        }
+        return json_data
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
