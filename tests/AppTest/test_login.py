@@ -1,7 +1,7 @@
 import unittest
 from yapper import create_app, db
-from yapper.user.models import Role, User
-from yapper.blog.models import Post
+from yapper.blueprints.user.models import Role, User
+from yapper.blueprints.blog.models import Post
 
 
 class LoginTestCase(unittest.TestCase):
@@ -15,12 +15,12 @@ class LoginTestCase(unittest.TestCase):
         Role.insert_roles()
         role = Role.query.filter_by(name='user').first()
         user = User(
-                name='Test User',
-                email='test@mail.com',
-                password='testpass',
-                status=True,
-                role=role
-            )
+            name='Test User',
+            email='test@mail.com',
+            password='testpass',
+            status=True,
+            role=role
+        )
         db.session.add(user)
         db.session.commit()
 
@@ -59,5 +59,5 @@ class LoginTestCase(unittest.TestCase):
             ), follow_redirects=True)
         assert '<h2>hello</h2>' in rv.data
 
-        rv = self.client.get('/blog/12')
+        rv = self.client.get('/blog/p/12')
         assert rv.status_code == 404

@@ -1,6 +1,6 @@
 import unittest
 from yapper import create_app, db
-from yapper.user.models import User, Role
+from yapper.blueprints.user.models import User, Role
 
 
 class TestUserAddToDb(unittest.TestCase):

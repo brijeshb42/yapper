@@ -6,8 +6,8 @@ from werkzeug.security import generate_password_hash, \
 from flask.ext.login import UserMixin, AnonymousUserMixin
 
 from yapper import db
-# from config import Config
 from yapper import login_manager
+from vomitter import LOGGER as L
 
 
 class Permission:
@@ -46,6 +46,7 @@ class Role(BaseModel):
 
     @staticmethod
     def insert_roles():
+        L.i('Inserting default roles.')
         roles = {
             'User': Permission.user(),
             'Admin': Permission.admin()
@@ -59,6 +60,7 @@ class Role(BaseModel):
             role.default = roles[r][1]
             db.session.add(role)
         db.session.commit()
+        L.i('Default roles %s added.', ', '.join(roles.keys()))
 
 
 class User(UserMixin, BaseModel):

@@ -36,11 +36,11 @@ def create_app(config_name):
     login_manager.init_app(app)
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    from .main import main_blueprint
-    from .user import user_blueprint
-    from .blog import blog_blueprint
+    from yapper.blueprints.main import main_blueprint
+    from yapper.blueprints.user import user_blueprint
+    from yapper.blueprints.blog import blog_blueprint
 
-    app.register_blueprint(main_blueprint, url_prefix='/')
+    app.register_blueprint(main_blueprint, url_prefix='')
     app.register_blueprint(
         user_blueprint,
         url_prefix=config[config_name].USER_PREFIX

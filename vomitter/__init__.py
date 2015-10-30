@@ -1,11 +1,12 @@
 """Create some default loggers."""
 import sys
-import os
-from os.path import *
+from os.path import join, dirname, abspath
 import logging
 from logging.handlers import RotatingFileHandler
+
 from .logger import BaseLogger, GmailSMTPHandler
-from config import config, Config
+from config import Config
+
 
 ALGO = "algo"
 FORMAT_LOG = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -67,11 +68,11 @@ def get_file_vomitter(name="app", level=DEF_LEVEL):
 def get_mail_handler(name="app", level=DEF_LEVEL):
     """Mail handler."""
     handler = GmailSMTPHandler(
-            (Config.MAIL_HOST, Config.MAIL_PORT),
-            Config.MAIL_FROM,
-            Config.MAIL_TO,
-            "%s Server Error." % Config.APP_NAME,
-            (Config.MAIL_FROM, Config.MAIL_PASSWORD))
+        (Config.MAIL_HOST, Config.MAIL_PORT),
+        Config.MAIL_FROM,
+        Config.MAIL_TO,
+        "%s Server Error." % Config.APP_NAME,
+        (Config.MAIL_FROM, Config.MAIL_PASSWORD))
     handler.setLevel(level)
     handler.setFormatter(get_mail_formatter())
     return handler

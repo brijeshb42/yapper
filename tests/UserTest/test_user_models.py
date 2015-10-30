@@ -1,7 +1,7 @@
 import unittest
 
 from yapper import db
-from yapper.user.models import User, Role, Permission, AnonymousUser
+from yapper.blueprints.user.models import User, Role, Permission, AnonymousUser
 
 
 class UserModelTestCase(unittest.TestCase):

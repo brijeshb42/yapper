@@ -1,8 +1,8 @@
 """Manger script."""
 import os
 from yapper import create_app, db
-from yapper.user.models import Role, User
-from yapper.blog.models import Tag, Category, Post
+from yapper.blueprints.user.models import Role, User
+from yapper.blueprints.blog.models import Tag, Category, Post
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -50,7 +50,6 @@ def init():
         )
         db.session.add(u)
         db.session.commit()
-    print('DB initialized')
 
 
 if __name__ == '__main__':

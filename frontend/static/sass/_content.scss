@@ -71,3 +71,10 @@
     margin: 0 auto;
   }
 }
+
+.markdown-body .codehilitetable th, .markdown-body .codehilitetable td {
+  padding: 0
+}
+.markdown-body .codehilitetable pre {
+  margin-bottom: 0;
+}

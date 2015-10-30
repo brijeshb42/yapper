@@ -1,7 +1,7 @@
 import unittest
 from yapper import db, create_app
-from yapper.blog.models import Post, Tag, Category
-from yapper.user.models import User
+from yapper.blueprints.blog.models import Post, Tag, Category
+from yapper.blueprints.user.models import User
 
 
 class TagAddTestCase(unittest.TestCase):

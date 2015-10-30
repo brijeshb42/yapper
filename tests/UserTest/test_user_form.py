@@ -1,7 +1,9 @@
 import unittest
 
+from flask import url_for
+
 from yapper import create_app, db
-from yapper.user.models import Role, User
+from yapper.blueprints.user.models import Role, User
 
 
 class UserFormTestCase(unittest.TestCase):
@@ -33,24 +35,24 @@ class UserFormTestCase(unittest.TestCase):
         self.app_context.pop()
 
     def login(self, username, password):
-        return self.client.post('/u/login', data=dict(
+        return self.client.post(url_for('user.login'), data=dict(
             email=username,
             password=password
         ), follow_redirects=True)
 
     def logout(self):
-        return self.client.get('/u/logout', follow_redirects=True)
+        return self.client.get(url_for('user.logout'), follow_redirects=True)
 
     def test_post_with_empty_field(self):
         rv = self.login(self.app.config['FLASKY_ADMIN'], 'testpass')
-        rv = self.client.post('/blog/new', data=dict(
+        rv = self.client.post(url_for('blog.add'), data=dict(
             title='Hello'
         ), follow_redirects=False)
         assert 'Provide a description' in rv.data
 
     def test_post_add_via_form(self):
         rv = self.login('test@example.com', 'testpass')
-        rv = self.client.post('/blog/new', data=dict(
+        rv = self.client.post(url_for('blog.add'), data=dict(
             title='Hello',
             description='Hi',
             body='# Hello World'
@@ -59,13 +61,14 @@ class UserFormTestCase(unittest.TestCase):
 
     def test_admin_post_not_deleted_by_others(self):
         rv = self.login(self.app.config['FLASKY_ADMIN'], 'testpass')
-        rv = self.client.post('/blog/new', data=dict(
+        rv = self.client.post(url_for('blog.add'), data=dict(
             title='Hello',
             description='Hi',
-            body='# Hello World'
+            body='### Hello World'
         ), follow_redirects=True)
-        assert '<h1>Hello World</h1>' in rv.data
+        assert '<h3>Hello World</h3>' in rv.data
         rv = self.logout()
         rv = self.login('test@example.com', 'testpass')
-        rv = self.client.delete('/blog/1', follow_redirects=True)
+        rv = self.client.delete(
+            url_for('blog.delete', pid=1), follow_redirects=True)
         assert rv.status_code == 403

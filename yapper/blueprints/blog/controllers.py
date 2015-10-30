@@ -1,15 +1,24 @@
 """Blog post controller."""
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
-from flask import current_app, redirect, url_for, render_template, \
-    flash, request, abort, jsonify
-from yapper import db
+from flask import (
+    current_app,
+    redirect,
+    url_for,
+    render_template,
+    flash,
+    request,
+    abort,
+    jsonify
+)
 from flask.ext.login import login_required, current_user
+
+from yapper import db
+from yapper.decorators import permission_required
 from . import blog_blueprint
 from .forms import PostForm
 from .models import Post, Tag
 from ..user.models import Permission
-from yapper.decorators import permission_required
 
 
 @blog_blueprint.route('/page/<int:page>')
@@ -24,16 +33,19 @@ def index(page=1):
         error_out=False
     )
     posts = pagination.items
+    status = 200
+    if len(posts) < 1:
+        status = 404
     return render_template(
         'blog/index.html',
         posts=posts,
         pagination=pagination,
         title='Posts' if page < 2 else 'Posts - Page '+str(page)
-    )
+    ), status
 
 
-@blog_blueprint.route('/<int:pid>', methods=['GET'])
-@blog_blueprint.route('/<int:pid>/<string:slug>', methods=['GET'])
+@blog_blueprint.route('/p/<int:pid>', methods=['GET'])
+@blog_blueprint.route('/p/<int:pid>/<string:slug>', methods=['GET'])
 def get_post(pid=None, slug=None):
     """Display a blog post with given id."""
     post = Post.query.get_or_404(pid)

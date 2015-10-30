@@ -1,4 +1,5 @@
 from flask import Blueprint
+
 from ..user.models import Permission
 
 BP_NM = 'main'
