@@ -42,14 +42,13 @@ def init():
     db.session.add(c)
     db.session.commit()
     u = User.query.filter_by(email=app.config['FLASKY_ADMIN']).first()
-    if u is None:
+    if not u:
         u = User(
             email=app.config['FLASKY_ADMIN'],
             password='testpass',
             name='Admin'
         )
-        db.session.add(u)
-        db.session.commit()
+        u.save()
     if app.debug:
         Post.generate_fake()
 
