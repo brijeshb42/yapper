@@ -30,7 +30,7 @@ def test():
     os.environ["FLASK_CONFIG"] = "test"
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
-    del os.environ["FLASK_CONFIG"]
+    os.unlink('data-test.db')
 
 
 @manager.command
@@ -50,6 +50,8 @@ def init():
         )
         db.session.add(u)
         db.session.commit()
+    if app.debug:
+        Post.generate_fake()
 
 
 if __name__ == '__main__':

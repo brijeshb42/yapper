@@ -1,16 +1,9 @@
 from yapper import db
+from yapper.lib.models import BaseModel
 from yapper.utilities.md import create_post_from_md
 
 TYPE_POST = 1
 TYPE_PAGE = 2
-
-
-class BaseModel(db.Model):
-    __abstract__ = True
-    id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    modified_at = db.Column(db.DateTime, default=db.func.current_timestamp(),
-                            onupdate=db.func.current_timestamp())
 
 
 tags_posts = db.Table(
@@ -51,10 +44,10 @@ class Post(BaseModel):
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     title = db.Column(db.String(256))
     slug = db.Column(db.String(300))
-    description = db.Column(db.Text)
-    body = db.Column(db.Text)
+    description = db.Column(db.Text, default='')
+    body = db.Column(db.Text, default='')
     status = db.Column(db.Boolean, default=True)
-    body_html = db.Column(db.Text)
+    body_html = db.Column(db.Text, default='')
     tags = db.relationship(
         'Tag', secondary=tags_posts,
         backref=db.backref('posts', lazy='dynamic')

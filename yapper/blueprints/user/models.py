@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from flask import current_app
 from werkzeug.security import generate_password_hash, \
     check_password_hash
@@ -7,6 +5,7 @@ from flask.ext.login import UserMixin, AnonymousUserMixin
 
 from yapper import db
 from yapper import login_manager
+from yapper.lib.models import BaseModel
 from vomitter import LOGGER as L
 
 
@@ -23,14 +22,6 @@ class Permission:
     @staticmethod
     def admin():
         return (Permission.ADMIN, False)
-
-
-class BaseModel(db.Model):
-    __abstract__ = True
-    id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    modified_at = db.Column(db.DateTime, default=datetime.utcnow,
-                            onupdate=datetime.utcnow)
 
 
 class Role(BaseModel):

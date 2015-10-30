@@ -1,26 +1,40 @@
-from flask import render_template, flash, redirect, request, url_for
-from flask.ext.login import login_required, login_user, logout_user,\
+from flask import (
+    Blueprint,
+    render_template,
+    flash,
+    redirect,
+    request,
+    url_for
+)
+from flask.ext.login import (
+    login_required,
+    login_user,
+    logout_user,
     current_user
+)
 
 from yapper import db
-from yapper.decorators import admin_required
-from . import user_blueprint as ubp
+
+from .decorators import admin_required
 from .forms import LoginForm, RegisterForm
 from .models import User
 
+BP_NM = 'user'
+user = Blueprint(BP_NM, __name__)
 
-@ubp.route('/')
+
+@user.route('/')
 @login_required
 def index():
     return 'user index'
 
 
-@ubp.route('/<name>')
+@user.route('/<name>')
 def user_index(name):
     return 'user ' + name
 
 
-@ubp.route('/login', methods=['GET', 'POST'])
+@user.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user is not None and current_user.is_authenticated() \
             and current_user.is_confirmed():
@@ -37,7 +51,7 @@ def login():
     return render_template('user/login.html', form=form)
 
 
-@ubp.route('/logout')
+@user.route('/logout')
 @login_required
 def logout():
     logout_user()
@@ -45,7 +59,7 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-@ubp.route('/signup', methods=['GET', 'POST'])
+@user.route('/signup', methods=['GET', 'POST'])
 @admin_required
 def signup():
     form = RegisterForm()
@@ -57,8 +71,7 @@ def signup():
             role_id=form.role.data,
             status=form.confirm.data
         )
-        db.session.add(user)
-        db.session.commit()
+        user.save()
         flash(u'You have been registered', 'success')
         return redirect(url_for('main.index'))
     return render_template('user/signup.html', form=form)

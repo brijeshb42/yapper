@@ -9,20 +9,25 @@ from flask import (
     flash,
     request,
     abort,
-    jsonify
+    jsonify,
+    Blueprint
 )
 from flask.ext.login import login_required, current_user
 
 from yapper import db
-from yapper.decorators import permission_required
-from . import blog_blueprint
+from ..user.decorators import permission_required
 from .forms import PostForm
 from .models import Post, Tag
 from ..user.models import Permission
 
 
-@blog_blueprint.route('/page/<int:page>')
-@blog_blueprint.route('/')
+BP_NM = 'blog'
+
+blog = Blueprint(BP_NM, __name__)
+
+
+@blog.route('/page/<int:page>')
+@blog.route('/')
 def index(page=1):
     """Show list of latest blog posts."""
     pagination = Post.query.order_by(
@@ -44,8 +49,8 @@ def index(page=1):
     ), status
 
 
-@blog_blueprint.route('/p/<int:pid>', methods=['GET'])
-@blog_blueprint.route('/p/<int:pid>/<string:slug>', methods=['GET'])
+@blog.route('/<int:pid>', methods=['GET'])
+@blog.route('/<int:pid>/<string:slug>', methods=['GET'])
 def get_post(pid=None, slug=None):
     """Display a blog post with given id."""
     post = Post.query.get_or_404(pid)
@@ -57,7 +62,7 @@ def get_post(pid=None, slug=None):
     )
 
 
-@blog_blueprint.route('/new', methods=['GET', 'POST'])
+@blog.route('/new', methods=['GET', 'POST'])
 @login_required
 @permission_required(Permission.WRITE_POSTS)
 def add():
@@ -71,8 +76,7 @@ def add():
             content=form.body.data,
             author=current_user._get_current_object()
         )
-        db.session.add(post)
-        db.session.commit()
+        post.save()
         flash(u'Post added')
         return redirect(url_for('.index'))
     else:
@@ -83,7 +87,7 @@ def add():
         title='Create New Post'), status
 
 
-@blog_blueprint.route('/<int:pid>/edit', methods=['GET', 'POST'])
+@blog.route('/<int:pid>/edit', methods=['GET', 'POST'])
 @login_required
 @permission_required(Permission.WRITE_POSTS)
 def edit_post(pid=None):
@@ -97,8 +101,7 @@ def edit_post(pid=None):
         post.title = form.title.data
         post.description = form.description.data
         post.content = form.body.data
-        db.session.add(post)
-        db.session.commit()
+        post.save()
         flash(u'Post Updated', 'success')
         return redirect(url_for('.get_post', pid=post.id))
     else:
@@ -113,21 +116,20 @@ def edit_post(pid=None):
     ), status
 
 
-@blog_blueprint.route('/<int:pid>', methods=['DELETE', 'POST'])
+@blog.route('/<int:pid>', methods=['DELETE', 'POST'])
 @login_required
 def delete(pid):
     """Delete a blog post with given id."""
     post = Post.query.get_or_404(pid)
     if current_user.is_admin() or post.author.id == current_user.id:
-        db.session.delete(post)
-        db.session.commit()
-        flash(u'Post deleted.', 'success')
+        post.delete()
+        flash('Post deleted.', 'success')
         return redirect(url_for('.index'))
     else:
         abort(403)
 
 
-@blog_blueprint.route('/tag/', methods=['GET', 'POST', 'DELETE', 'PUT'])
+@blog.route('/tag/', methods=['GET', 'POST', 'DELETE', 'PUT'])
 @login_required
 def add_tag():
     """Tag addition and deletion."""
