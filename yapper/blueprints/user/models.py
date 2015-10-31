@@ -1,12 +1,12 @@
 from flask import current_app
 from werkzeug.security import generate_password_hash, \
     check_password_hash
-from flask.ext.login import UserMixin, AnonymousUserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 
 from yapper import db
 from yapper import login_manager
 from yapper.lib.models import BaseModel
-from vomitter import LOGGER as L
+# from vomitter import LOGGER as L
 
 
 class Permission:

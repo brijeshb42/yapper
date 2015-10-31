@@ -9,6 +9,9 @@ class PostAPI(MethodView):
     MODEL = Post
 
     def get(self, m_id=None):
+        if m_id:
+            item = self.MODEL.query.get_or_404(m_id)
+            return json_success(data=item.to_json())
         items = self.MODEL.query.order_by(
             self.MODEL.created_at.desc()).limit(10)
         resp = []

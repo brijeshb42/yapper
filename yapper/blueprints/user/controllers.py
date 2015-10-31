@@ -6,7 +6,7 @@ from flask import (
     request,
     url_for
 )
-from flask.ext.login import (
+from flask_login import (
     login_required,
     login_user,
     logout_user,
@@ -58,6 +58,7 @@ def logout():
 
 
 @user.route('/signup', methods=['GET', 'POST'])
+@login_required
 @admin_required
 def signup():
     form = RegisterForm()

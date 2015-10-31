@@ -1,5 +1,6 @@
 """Blog post controller."""
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from slugify import slugify
 
 from flask import (
     current_app,
@@ -12,7 +13,7 @@ from flask import (
     jsonify,
     Blueprint
 )
-from flask.ext.login import login_required, current_user
+from flask_login import login_required, current_user
 
 from ..user.decorators import permission_required
 from .forms import PostForm
@@ -54,9 +55,8 @@ def get_post(pid=None, slug=None):
     """Display a blog post with given id."""
     post = Post.query.get_or_404(pid)
     return render_template(
-        'blog/index.html',
-        posts=[post],
-        pagination=None,
+        'blog/post.html',
+        post=post,
         title=post.title
     )
 
@@ -71,14 +71,15 @@ def add():
     if form.validate_on_submit():
         post = Post(
             title=form.title.data,
+            slug=slugify(form.title.data),
             description=form.description.data,
             content=form.body.data,
             author=current_user._get_current_object()
         )
         post.save()
         flash(u'Post added')
-        return redirect(url_for('.index'))
-    else:
+        return redirect(url_for('.get_post_by_slug', slug=post.slug))
+    elif request.method == "POST":
         status = 406
     return render_template(
         'blog/add.html',
@@ -103,7 +104,7 @@ def edit_post(pid=None):
         post.save()
         flash(u'Post Updated', 'success')
         return redirect(url_for('.get_post', pid=post.id))
-    else:
+    elif request.method == 'POST':
         status = 406
     form.title.data = post.title
     form.description.data = post.description
@@ -166,3 +167,16 @@ def add_tag():
             'type': 'success',
             'message': tags
         })
+
+
+@blog.route('/<string:slug>', methods=['GET'])
+def get_post_by_slug(slug=None):
+    """Display a blog post with given id."""
+    post = Post.query.filter_by(slug=slug).first()
+    if not post:
+        abort(404)
+    return render_template(
+        'blog/post.html',
+        post=post,
+        title=post.title
+    )

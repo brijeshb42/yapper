@@ -1,3 +1,6 @@
+import slugify
+from flask import url_for
+
 from yapper import db
 from yapper.lib.models import BaseModel
 from yapper.utilities.md import create_post_from_md
@@ -57,7 +60,7 @@ class Post(BaseModel):
     __tablename__ = 'posts'
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     title = db.Column(db.String(256))
-    slug = db.Column(db.String(300))
+    slug = db.Column(db.String(500), unique=True)
     description = db.Column(db.Text, default='')
     body = db.Column(db.Text, default='')
     status = db.Column(db.Boolean, default=True)
@@ -75,10 +78,13 @@ class Post(BaseModel):
         json_data = {
             'id': self.id,
             'title': self.title,
+            'slug': self.slug,
             'description': self.description,
-            'body': self.body,
             'created_at': str(self.created_at),
-            'author': self.author.to_json()
+            'modified_at': str(self.modified_at),
+            'author': self.author.to_json(),
+            'permalink': url_for('blog.get_post_by_slug',
+                           slug=self.slug, _external=True)
         }
         return json_data
 
@@ -100,15 +106,18 @@ class Post(BaseModel):
         target.body_html = create_post_from_md(value)
 
     @staticmethod
-    def generate_fake(count=100):
-        from random import seed, randint
+    def generate_fake(count=10):
+        from random import seed
         import forgery_py
         seed()
         for i in range(count):
             author_id = 1
+            title = forgery_py.lorem_ipsum.sentence()
             p = Post(
                 content=forgery_py.lorem_ipsum.paragraphs(),
-                title=forgery_py.lorem_ipsum.sentence(),
+                title=title,
+                slug=slugify.slugify(title),
+                description=forgery_py.lorem_ipsum.sentence(),
                 author_id=author_id
             )
             db.session.add(p)

@@ -3,14 +3,15 @@ import logging
 import sys
 
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 # from flask_wtf import CsrfProtect
 
 from werkzeug.contrib.fixers import ProxyFix
 
 from config import config
-from vomitter import get_mail_handler, get_file_handler, LOGGER as L
+from vomitter import get_mail_handler, get_file_handler
+from .lib.response import json_error
 
 db = SQLAlchemy()
 # csrf = CsrfProtect()
@@ -66,6 +67,23 @@ def create_app(config_name, set_utf=True):
         blog,
         url_prefix=config[config_name].BLOG_PREFIX
     )
+
+    @app.errorhandler(403)
+    def handle_403(e):
+        return json_error(403, 'You are not allowed here!')
+
+    @app.errorhandler(406)
+    def handle_406(e):
+        return json_error(406, 'Data not acceptable!')
+
+    @app.errorhandler(400)
+    def handle_400(e):
+        return json_error(400, ('You sent a request that this'
+                                ' server could not understand!'))
+
+    @app.errorhandler(404)
+    def handle_404(e):
+        return json_error(404, 'What you were looking for isn\'t here!')
 
     if not app.debug:
         app.logger.addHandler(

@@ -1,6 +1,7 @@
 from ..blog.models import Category
-from .blog import PostAPI
+from ..blog.forms import TagForm
+from .tag import TagAPI
 
 
-class CategoryAPI(PostAPI):
+class CategoryAPI(TagAPI):
     MODEL = Category

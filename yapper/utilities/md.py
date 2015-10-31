@@ -2,7 +2,7 @@ from urlparse import urlparse
 
 from markdown import markdown
 from pyembed.markdown import PyEmbedMarkdown
-# import bleach
+import bleach
 
 from .extensions import LazyYoutubeExtension
 
@@ -47,7 +47,7 @@ def create_post_from_md(body):
     # allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
     #                 'em', 'li', 'i', 'ol', 'pre', 'strong', 'ul', 'h1',
     #                 'h2', 'h3', 'p', 'span']
-    return markdown(
+    no_link_text = markdown(
         body,
         output_format='html5',
         extensions=[
@@ -56,16 +56,8 @@ def create_post_from_md(body):
             LazyYoutubeExtension()
         ]
     )
-    # return bleach.linkify(
-    #     markdown(
-    #         body,
-    #         output_format='html5',
-    #         extensions=[
-    #             'codehilite(linenums=True)',
-    #             PyEmbedMarkdown(),
-    #             LazyYoutubeExtension()
-    #         ]
-    #     ),
-    #     callbacks=[externallify_url, dont_linkify_urls],
-    #     skip_pre=False
-    # )
+    return bleach.linkify(
+        no_link_text,
+        callbacks=[externallify_url, dont_linkify_urls],
+        skip_pre=True
+    )
