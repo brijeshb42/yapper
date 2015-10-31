@@ -18,9 +18,10 @@ class ModelAPITestCase(unittest.TestCase):
         self.app_context.push()
         db.create_all()
         tag = Tag(name="tag")
-        tag.save()
         category = Category(name="category")
-        category.save()
+        db.session.add(tag)
+        db.session.add(category)
+        db.session.commit()
 
     def tearDown(self):
         db.session.remove()
