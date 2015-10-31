@@ -10,7 +10,7 @@ class Config:
     APP_NAME = 'Yapper'
     TABLE_PREFIX = 'cms'
     USER_PREFIX = '/u'
-    BLOG_PREFIX = '/blog'
+    BLOG_PREFIX = '/posts'
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'somethingsecret'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN') or 'admin@example.com'

@@ -1,4 +1,7 @@
 import unittest
+
+from flask import url_for
+
 from yapper import create_app, db
 from yapper.blueprints.user.models import Role, User
 from yapper.blueprints.blog.models import Post
@@ -30,13 +33,13 @@ class LoginTestCase(unittest.TestCase):
         self.app_context.pop()
 
     def login(self, e, p):
-        return self.client.post('/u/login', data=dict(
+        return self.client.post(url_for('user.login'), data=dict(
             email=e,
             password=p
         ), follow_redirects=True)
 
     def logout(self):
-        return self.client.get('/u/logout', follow_redirects=True)
+        return self.client.get(url_for('user.logout'), follow_redirects=True)
 
     def test_empty_db(self):
         p = Post.query.all()
@@ -47,17 +50,20 @@ class LoginTestCase(unittest.TestCase):
         assert 'Test User' in rv.data
         rv = self.logout()
         assert 'You have been logged out' in rv.data
-        rv = self.login('tets@gmail.com', 'po')
+        rv = self.login('test@gmail.com', 'po')
         assert 'Invalid combination' in rv.data
 
     def test_add_post(self):
         self.login('test@mail.com', 'testpass')
-        rv = self.client.post('/blog/new', data=dict(
+        rv = self.client.post(url_for('blog.add'), data=dict(
             title='Title',
             description='Desc',
-            body='## hello'
+            body='## hello there'
             ), follow_redirects=True)
-        assert '<h2>hello</h2>' in rv.data
+        assert '<h2>hello there</h2>' in rv.data
 
-        rv = self.client.get('/blog/p/12')
+        rv = self.client.get(
+            url_for(
+                'blog.get_post_by_slug',
+                slug='some-slug-that-is-not-there'))
         assert rv.status_code == 404
