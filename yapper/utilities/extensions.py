@@ -47,7 +47,10 @@ class LazyYoutubePattern(Pattern):
 
 class LazyYoutubeExtension(Extension):
 
-    """docstring for LazyYoutubeMarkdown."""
+    """
+    Parses a youtube URL in markdown and renders that as an empty div
+    with data-* attributes to be used by lazyyt.js.
+    """
 
     def __init__(self):
         super(LazyYoutubeExtension, self).__init__()

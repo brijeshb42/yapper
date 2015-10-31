@@ -171,7 +171,7 @@ def add_tag():
 
 @blog.route('/<string:slug>', methods=['GET'])
 def get_post_by_slug(slug=None):
-    """Display a blog post with given id."""
+    """Display a blog post with given slug."""
     post = Post.query.filter_by(slug=slug).first()
     if not post:
         abort(404)

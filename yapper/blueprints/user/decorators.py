@@ -6,6 +6,9 @@ from .models import Permission
 
 
 def permission_required(permission):
+    """
+    Checks for a specific permission the current_user has or not.
+    """
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -17,4 +20,5 @@ def permission_required(permission):
 
 
 def admin_required(f):
+    """Like `permission required`, but specific to admin."""
     return permission_required(Permission.ADMIN)(f)

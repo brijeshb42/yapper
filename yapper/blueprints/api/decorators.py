@@ -4,6 +4,7 @@ from flask import request, abort
 
 from yapper.lib.response import json_error
 
+
 def has_access_token(tkn):
 
     """
@@ -27,11 +28,9 @@ def has_access_token(tkn):
 def validate_form_data(FORM_Class):
 
     """
-    Checks only for a fixed Access-Token in header data.
-    Will update after figuring out how to generate tokens.
-
-    Used as a decorator in the before_request part of the
-    API Blueprint.
+    Validates the passed form/json data to a request and passes the
+    form to the called function.
+    If form data is not valid, return a 406 response.
     """
     def decorator(f):
         @wraps(f)

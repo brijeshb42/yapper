@@ -27,11 +27,6 @@ def index():
     return 'user index'
 
 
-@user.route('/<name>')
-def user_index(name):
-    return 'user ' + name
-
-
 @user.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user is not None and current_user.is_authenticated() \
@@ -74,3 +69,8 @@ def signup():
         flash(u'You have been registered', 'success')
         return redirect(url_for('main.index'))
     return render_template('user/signup.html', form=form)
+
+
+@user.route('/<name>')
+def user_index(name):
+    return 'user ' + name

@@ -84,7 +84,7 @@ class Post(BaseModel):
             'modified_at': str(self.modified_at),
             'author': self.author.to_json(),
             'permalink': url_for('blog.get_post_by_slug',
-                           slug=self.slug, _external=True)
+                                 slug=self.slug, _external=True)
         }
         return json_data
 
