@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{%- block title %}{{title}}{%- endblock %}
+{%- block meta -%}
+<meta name="description" content="{{- post.description -}}">
+<meta name="author" content="{{- post.author.name -}}">
+{%- endblock -%}
+{% block content -%}
+    <div class="post">
+    <h2><a href="{{ url_for('blog.get_post_by_slug', slug=post.slug, pid=post.id) }}">{{ post.title }}</a></h2>
+    <p>Created at: {{ post.created_at }} by {{ post.author.name }}</p>
+    <div class="markdown-body">{{ post.html|safe }}</div>
+    <form action="{{ url_for('blog.delete', pid=post.id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+        <input type="hidden" name="_method" value="DELETE" />
+        <input type="submit" value="Delete"/>
+    </form>
+    <a href="{{- url_for('blog.edit_post', pid=post.id) -}}">Edit</a>
+    </div>
+{% endblock %}
