@@ -35,6 +35,13 @@ Message :
 """, FORMAT_TIME)
 
 
+def get_console_handler():
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    handler.setFormatter(get_formatter())
+    return handler
+
+
 def get_file_handler():
     """Return a RotatingFileHandler."""
     """To be used by various loggers across the app."""
@@ -49,9 +56,7 @@ def get_file_handler():
 def get_console_vomitter(name="app", level=DEF_LEVEL):
     """Return a console logger."""
     logger = BaseLogger(name, level)
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setLevel(level)
-    handler.setFormatter(get_formatter())
+    handler = get_console_handler()
     logger.addHandler(handler)
     return logger
 

@@ -89,6 +89,9 @@ class User(UserMixin, BaseModel):
     def password(self, password):
         self.password_hash = generate_password_hash(password)
 
+    def get_id(self):
+        return self.id
+
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
@@ -110,6 +113,8 @@ class User(UserMixin, BaseModel):
 
 
 class AnonymousUser(AnonymousUserMixin):
+    id = -1
+
     def can(self, permissions):
         return False
 
@@ -121,6 +126,9 @@ class AnonymousUser(AnonymousUserMixin):
 
     def is_confirmed(self):
         return False
+
+    def get_id(self):
+        return None
 
 
 login_manager.anonymous_user = AnonymousUser

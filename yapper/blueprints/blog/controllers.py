@@ -1,5 +1,4 @@
 """Blog post controller."""
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from slugify import slugify
 
 from flask import (
@@ -10,14 +9,13 @@ from flask import (
     flash,
     request,
     abort,
-    jsonify,
     Blueprint
 )
 from flask_login import login_required, current_user
 
 from ..user.decorators import permission_required
 from .forms import PostForm
-from .models import Post, Tag
+from .models import Post
 from ..user.models import Permission
 
 
@@ -38,15 +36,12 @@ def index(page=1):
         error_out=False
     )
     posts = pagination.items
-    status = 200
-    if len(posts) < 1:
-        status = 404
     return render_template(
         'blog/index.html',
         posts=posts,
         pagination=pagination,
         title='Posts' if page < 2 else 'Posts - Page '+str(page)
-    ), status
+    )
 
 
 @blog.route('/<int:pid>', methods=['GET'])
@@ -121,52 +116,52 @@ def edit_post(pid=None):
 def delete(pid):
     """Delete a blog post with given id."""
     post = Post.query.get_or_404(pid)
-    if current_user.is_admin() or post.author.id == current_user.id:
-        post.delete()
-        flash('Post deleted.', 'success')
-        return redirect(url_for('.index'))
-    else:
+    if not (current_user.is_admin() or current_user.id == post.author.id):
         abort(403)
+        return
+    post.delete()
+    flash('Post deleted.', 'success')
+    return redirect(url_for('.index'))
 
 
-@blog.route('/tag/', methods=['GET', 'POST', 'DELETE', 'PUT'])
-@login_required
-def add_tag():
-    """Tag addition and deletion."""
-    if request.method == 'GET':
-        tag_name = request.args.get('name', '')
-        if tag_name == '':
-            return jsonify({
-                'type': 'error',
-                'message': 'Invalid paramater.'
-            }), 400
-        tags = Tag.query.filter_by(name=tag_name.lower()).all()
-        return jsonify({
-            'type': 'success',
-            'message': tags
-        })
-    if request.method == 'POST':
-        taglist = request.form.get('name', '')
-        if taglist == '':
-            return jsonify({
-                'type': 'error',
-                'message': 'Invalid paramater.'
-            }), 400
-        taglist = taglist.lower().split(',')
-        tags = []
-        for tag in taglist:
-            try:
-                Tag.query.filter_by(name=tag).one()
-            except NoResultFound:
-                tags.append(Tag(name=tag))
-            except MultipleResultsFound:
-                pass
-        if len(tags) > 0:
-            Tag.save_all(tags)
-        return jsonify({
-            'type': 'success',
-            'message': tags
-        })
+# @blog.route('/tag/', methods=['GET', 'POST', 'DELETE', 'PUT'])
+# @login_required
+# def add_tag():
+#     """Tag addition and deletion."""
+#     if request.method == 'GET':
+#         tag_name = request.args.get('name', '')
+#         if tag_name == '':
+#             return jsonify({
+#                 'type': 'error',
+#                 'message': 'Invalid paramater.'
+#             }), 400
+#         tags = Tag.query.filter_by(name=tag_name.lower()).all()
+#         return jsonify({
+#             'type': 'success',
+#             'message': tags
+#         })
+#     if request.method == 'POST':
+#         taglist = request.form.get('name', '')
+#         if taglist == '':
+#             return jsonify({
+#                 'type': 'error',
+#                 'message': 'Invalid paramater.'
+#             }), 400
+#         taglist = taglist.lower().split(',')
+#         tags = []
+#         for tag in taglist:
+#             try:
+#                 Tag.query.filter_by(name=tag).one()
+#             except NoResultFound:
+#                 tags.append(Tag(name=tag))
+#             except MultipleResultsFound:
+#                 pass
+#         if len(tags) > 0:
+#             Tag.save_all(tags)
+#         return jsonify({
+#             'type': 'success',
+#             'message': tags
+#         })
 
 
 @blog.route('/<string:slug>', methods=['GET'])

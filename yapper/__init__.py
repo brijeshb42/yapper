@@ -2,7 +2,7 @@
 import logging
 import sys
 
-from flask import Flask
+from flask import Flask  # , request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 # from flask_wtf import CsrfProtect
@@ -11,6 +11,7 @@ from werkzeug.contrib.fixers import ProxyFix
 
 from config import config
 from vomitter import get_mail_handler, get_file_handler
+# from vomitter import LOGGER as L
 from .lib.response import json_error
 
 db = SQLAlchemy()
@@ -91,5 +92,4 @@ def create_app(config_name, set_utf=True):
                              level=logging.ERROR))
     else:
         app.logger.addHandler(get_file_handler())
-
     return app
