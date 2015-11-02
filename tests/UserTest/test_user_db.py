@@ -20,16 +20,16 @@ class TestUserAddToDb(unittest.TestCase):
         self.assertTrue(role.id is None)
         db.session.add(role)
         db.session.commit()
-        self.assertTrue(role.id is not None)
-
-    def test_user_gets_id(self):
-        role = Role(name='admin')
-        db.session.add(role)
-        db.session.commit()
-        user = User(email='b2@gmail.com', password='1234', role=role)
         self.assertFalse(role.id is None)
+
+    def test_user_gets_role_and_id(self):
+        role = Role(name='administrator')
+        self.assertTrue(role.id is None)
+        user = User(email='b2@gmail.com', password='1234', role=role)
         self.assertTrue(user.id is None)
         db.session.add(user)
         db.session.commit()
+        self.assertFalse(role.id is None)
         self.assertFalse(user.id is None)
         self.assertTrue(user.role_id == role.id)
+        self.assertTrue(user.is_admin())

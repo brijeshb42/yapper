@@ -2,6 +2,7 @@ import unittest
 
 from yapper import db
 from yapper.blueprints.user.models import User, Role, Permission, AnonymousUser
+from config import Config
 
 
 class UserModelTestCase(unittest.TestCase):
@@ -33,14 +34,15 @@ class UserModelTestCase(unittest.TestCase):
         self.assertTrue(u.password_hash != u2.password_hash)
 
     def test_roles_and_permissions(self):
-        u = User(email='brijeshb2@gmail.com', password='adt')
+        u = User(email='user@gmail.com', password='adt')
         self.assertTrue(u.can(Permission.WRITE_POSTS))
 
     def test_admin(self):
         Role.insert_roles()
-        u = User(email='admin@example.com', password='adt')
+        u = User(email=Config.FLASKY_ADMIN, password='adt')
         self.assertTrue(u.is_admin())
 
     def test_anon_user(self):
         u = AnonymousUser()
+        self.assertTrue(u.id == -1)
         self.assertFalse(u.can(Permission.WRITE_POSTS))
