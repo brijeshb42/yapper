@@ -26,6 +26,7 @@ class Config:
     MAIL_FROM = 'admin@gmail.com'
     MAIL_USERNAME = 'tech@gmail.com'
     MAIL_PASSWORD = 'aaasa-JxxQ'
+    CACHE = True
 
     @staticmethod
     def init_app(app):
@@ -35,6 +36,7 @@ class Config:
 class DevConfig(Config):
     DEBUG = True
     SQLALCHEMY_ECHO = True
+    CACHE = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-dev.db')
 
@@ -45,6 +47,7 @@ class TestConfig(DevConfig):
     WTF_CSRF_ENABLED = False
     CSRF_ENABLED = False
     SQLALCHEMY_ECHO = False
+    CACHE = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-test.db')
 
