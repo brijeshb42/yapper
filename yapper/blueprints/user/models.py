@@ -35,6 +35,13 @@ class Role(BaseModel):
     def __repr__(self):
         return '<Role %s>' % self.name
 
+    def __init__(self, **kwargs):
+        super(Role, self).__init__(**kwargs)
+        if self.name and self.name in ["admin", "administrator"]:
+            self.permissions = Permission.ADMIN
+        else:
+            self.permissions = Permission.WRITE_POSTS
+
     @staticmethod
     def insert_roles():
         # L.i('Inserting default roles.')
