@@ -128,46 +128,6 @@ def delete(pid):
     return redirect(url_for('.index'))
 
 
-# @blog.route('/tag/', methods=['GET', 'POST', 'DELETE', 'PUT'])
-# @login_required
-# def add_tag():
-#     """Tag addition and deletion."""
-#     if request.method == 'GET':
-#         tag_name = request.args.get('name', '')
-#         if tag_name == '':
-#             return jsonify({
-#                 'type': 'error',
-#                 'message': 'Invalid paramater.'
-#             }), 400
-#         tags = Tag.query.filter_by(name=tag_name.lower()).all()
-#         return jsonify({
-#             'type': 'success',
-#             'message': tags
-#         })
-#     if request.method == 'POST':
-#         taglist = request.form.get('name', '')
-#         if taglist == '':
-#             return jsonify({
-#                 'type': 'error',
-#                 'message': 'Invalid paramater.'
-#             }), 400
-#         taglist = taglist.lower().split(',')
-#         tags = []
-#         for tag in taglist:
-#             try:
-#                 Tag.query.filter_by(name=tag).one()
-#             except NoResultFound:
-#                 tags.append(Tag(name=tag))
-#             except MultipleResultsFound:
-#                 pass
-#         if len(tags) > 0:
-#             Tag.save_all(tags)
-#         return jsonify({
-#             'type': 'success',
-#             'message': tags
-#         })
-
-
 @blog.route('/<string:slug>', methods=['GET'])
 def get_post_by_slug(slug=None):
     """Display a blog post with given slug."""
