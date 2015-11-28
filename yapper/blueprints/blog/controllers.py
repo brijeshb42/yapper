@@ -13,6 +13,7 @@ from flask import (
 )
 from flask_login import login_required, current_user
 
+from yapper.lib.decorators import profile
 from ..user.decorators import permission_required
 from .forms import PostForm
 from .models import Post
@@ -46,9 +47,10 @@ def index(page=1):
 
 @blog.route('/<int:pid>', methods=['GET'])
 @blog.route('/<int:pid>/<string:slug>', methods=['GET'])
+@profile
 def get_post(pid=None, slug=None):
     """Display a blog post with given id."""
-    post = Post.query.get_or_404(pid)
+    post = Post.get(pid)
     return render_template(
         'blog/post.html',
         post=post,

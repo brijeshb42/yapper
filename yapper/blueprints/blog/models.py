@@ -1,8 +1,11 @@
 import slugify
 from flask import url_for
 
+from vomitter import LOGGER as L
 from yapper import db
 from yapper.lib.models import BaseModel
+from yapper.lib.cache import cache
+from yapper.lib.decorators import profile
 from yapper.utilities.md import create_post_from_md
 
 TYPE_POST = 1
@@ -87,6 +90,23 @@ class Post(BaseModel):
                                  slug=self.slug, _external=True)
         }
         return json_data
+
+    @classmethod
+    @profile
+    def get_by_slug(cls, slug):
+        L.d('Getting from Cache.')
+        obj = cache.get(cls.key(slug))
+        if obj:
+            L.d('Cache hit for - %s' % cls.key(slug))
+            return obj
+        L.d('Cache miss for - %s' % cls.key(slug))
+        obj = cls.query.filter_by(slug=slug).first()
+        if obj:
+            L.d('Saving in cache - %s' % cls.key(slug))
+            cache.set(cls.key(slug), obj)
+        else:
+            L.d('The object was None')
+        return obj
 
     @property
     def content(self):

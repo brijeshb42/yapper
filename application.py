@@ -1,7 +1,7 @@
 """Create application instance using application factory."""
 import os
 
-import backend as application
+import yapper as application
 
 env = os.getenv('FLASK_CONFIG')
 
