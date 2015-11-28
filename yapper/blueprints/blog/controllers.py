@@ -51,6 +51,8 @@ def index(page=1):
 def get_post(pid=None, slug=None):
     """Display a blog post with given id."""
     post = Post.get(pid)
+    if not post:
+        return "Not found", 404
     return render_template(
         'blog/post.html',
         post=post,
